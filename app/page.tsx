@@ -2,8 +2,21 @@
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
 import { useEffect, useState } from "react";
+import Agendamento from "./agendamento/Agendamento";
 
 export default function Home() {
+  return(
+    <div>
+
+    </div>
+  )
+}
+
+
+/*
+
+ req GET para exibir o serviço
+ 
   const [service, setService] = useState<serviceType[]>([])
 
   useEffect(() => {
@@ -29,4 +42,4 @@ export default function Home() {
       ))}
     </div>
   );
-}
+*/
