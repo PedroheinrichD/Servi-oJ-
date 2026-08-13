@@ -1,14 +1,12 @@
 "use client"
-import { serviceType } from "@/types/serviceType";
-import { api } from "@/utils/api";
-import { useEffect, useState } from "react";
-import Agendamento from "./agendamento/Agendamento";
+
+import Link from "next/link"
 
 export default function Home() {
   return(
-    <div>
-
-    </div>
+    <Link href="/agendamento">
+      agendar
+    </Link>
   )
 }
 
@@ -16,7 +14,7 @@ export default function Home() {
 /*
 
  req GET para exibir o serviço
- 
+
   const [service, setService] = useState<serviceType[]>([])
 
   useEffect(() => {
