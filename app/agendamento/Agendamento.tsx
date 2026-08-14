@@ -100,8 +100,23 @@ export default function Agendamento() {
         }
     }
 
+    // requisição para obter as horas já cadastradas
+    useEffect(() => {
+        async function GetHorario() {
+            if(!data) return
+             try {
+                const res = await api.get(`/api/horario_disponivel?data=${data}`); // res.data vem assim: [{hora:"08:00:00"}, {hora:"10:00:00"}]
+                const horariosAgendados = res.data.map((item: any) => item.hora.slice(0, 5)); // transforma em ["08:00", "10:00"]
+                const disponiveis = HORARIOS.filter(item => !horariosAgendados.includes(item))  // compara com a lista fixa
+                setHorariosDisponiveis(disponiveis)
+                console.log(disponiveis);   
 
-
+            } catch (error) {
+                console.log('erro de horario' + error);
+            }
+        }
+        GetHorario()
+    }, [data])
 
 
     // pegando o dia atual
