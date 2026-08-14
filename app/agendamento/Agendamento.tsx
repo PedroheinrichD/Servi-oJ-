@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { User, Phone, MapPin, CalendarDays, Clock3, Sparkles, ChevronDown, Check, type LucideIcon } from 'lucide-react';
 import { api } from '@/utils/api';
 
@@ -56,6 +56,7 @@ export default function Agendamento() {
     const [confirmado, setConfirmado] = useState(false);
     const [servicoId, setServicoId] = useState(1);
     const [valor, setValor] = useState(35.00);
+    const [horariosDisponiveis, setHorariosDisponiveis] = useState([''])
 
     const obrigatoriosOk = Boolean(nome.trim() && telefone.trim() && endereco.trim() && data && horario);
     const erro = (valor: string | boolean): boolean => tentouEnviar && !valor;
@@ -93,13 +94,15 @@ export default function Agendamento() {
             });
 
             console.log(res.data); // vai mostrar: { mensagem: "Agendamento criado com sucesso!", ... }
-            alert("Agendamento criado com sucesso!");
 
         } catch (error) {
             console.error(error);
-            alert("Erro ao criar agendamento.");
         }
     }
+
+
+
+
 
     // pegando o dia atual
     const hoje = new Date();
@@ -349,7 +352,7 @@ export default function Agendamento() {
                                         onChange={(e) => setHorario(e.target.value)}
                                     >
                                         <option value="">Selecione</option>
-                                        {HORARIOS.map((h) => (
+                                        {horariosDisponiveis.map((h) => (
                                             <option key={h} value={h}>{h}</option>
                                         ))}
                                     </select>

@@ -19,13 +19,11 @@ export default async function handler(req, res) {
     );
 
     res.status(201).json({
-      mensagem: 'Agendamento criado com sucesso!', // depois remover isto 
       clienteId: clienteId,
       agendamentoId: resultadoAgendamento.insertId
     });
 
   } catch (error) {
-    console.error('Erro ao criar agendamento:', error); // depois remover isto 
-    res.status(500).json({ erro: 'Erro ao criar agendamento. Tente novamente.' });
+    res.status(500).json({ erro: 'Erro ao criar agendamento. Tente novamente.' + error });
   }
 }
