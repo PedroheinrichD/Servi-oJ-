@@ -69,6 +69,7 @@ export default function Agendamento() {
         setNome('');
         setTelefone('');
         setEndereco('');
+        setServicoValueId('');
         setData('');
         setHorario('');
         setTentouEnviar(false);
@@ -91,7 +92,7 @@ export default function Agendamento() {
             });
 
             console.log(res.data); // vai mostrar: { mensagem: "Agendamento criado com sucesso!", ... }
-
+            handleNovoAgendamento();
         } catch (error) {
             console.error(error);
         }
