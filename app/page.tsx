@@ -1,15 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 
 export default function Home() {
-  return(
-    <Link href="/agendamento">
-      agendar
-    </Link>
-  )
-}
+  return (
+    <div className="flex gap-8">
+      <Link href="/agendamento">agendar</Link>
 
+      <Link href="/admin">admin</Link>
+    </div>
+  );
+}
 
 /*
 
