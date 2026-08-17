@@ -55,7 +55,7 @@ export default function Agendamento() {
     const [confirmado, setConfirmado] = useState(false);
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([''])
 
-    const obrigatoriosOk = Boolean(nome.trim() && telefone.trim() && endereco.trim() && data && horario && servicoValueId );
+    const obrigatoriosOk = Boolean(nome.trim() && telefone.trim() && endereco.trim() && data && horario && servicoValueId);
     const erro = (valor: string | boolean): boolean => tentouEnviar && !valor;
 
     function handleSubmit(e: FormEvent<HTMLFormElement>): void {
@@ -91,8 +91,10 @@ export default function Agendamento() {
                 valor_na_epoca: resultado?.valor
             });
 
-            console.log(res.data); // vai mostrar: { mensagem: "Agendamento criado com sucesso!", ... }
-            handleNovoAgendamento();
+            // temporizador para esconder notificação            
+            setTimeout(() => {
+                handleNovoAgendamento();
+            }, 4000);
         } catch (error) {
             console.error(error);
         }
@@ -120,7 +122,7 @@ export default function Agendamento() {
         async function solicitaServico() {
             try {
                 const res = await api.get('/api/servico')
-                if(res === null) return
+                if (res === null) return
                 setSERVICOS(res.data)
             } catch (error) {
                 console.log(error);
