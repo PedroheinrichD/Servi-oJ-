@@ -53,10 +53,9 @@ export default function Agendamento() {
     const [SERVICOS, setSERVICOS] = useState<serviceGetType[]>([]);
     const [tentouEnviar, setTentouEnviar] = useState(false);
     const [confirmado, setConfirmado] = useState(false);
-    const [valor, setValor] = useState(35.00);
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([''])
 
-    const obrigatoriosOk = Boolean(nome.trim() && telefone.trim() && endereco.trim() && data && horario);
+    const obrigatoriosOk = Boolean(nome.trim() && telefone.trim() && endereco.trim() && data && horario && servicoValueId );
     const erro = (valor: string | boolean): boolean => tentouEnviar && !valor;
 
     function handleSubmit(e: FormEvent<HTMLFormElement>): void {
@@ -81,6 +80,7 @@ export default function Agendamento() {
             return
         }
         try {
+            const resultado = SERVICOS.find((item) => item.id === Number(servicoValueId));  // pegar o valor na epoca do agendamento
             const res = await api.post('/api/agendamento', {
                 nome: nome,
                 telefone: telefone,
@@ -88,7 +88,7 @@ export default function Agendamento() {
                 servico_id: servicoValueId,
                 data: data,              // formato: "2026-08-15"
                 hora: horario,              // formato: "10:00"
-                valor_na_epoca: valor
+                valor_na_epoca: resultado?.valor
             });
 
             console.log(res.data); // vai mostrar: { mensagem: "Agendamento criado com sucesso!", ... }
@@ -115,14 +115,12 @@ export default function Agendamento() {
     }, [data])
 
 
-    /*
-        servico, setServico
-    */
     // req para obter os serviços
     useEffect(() => {
         async function solicitaServico() {
             try {
                 const res = await api.get('/api/servico')
+                if(res === null) return
                 setSERVICOS(res.data)
             } catch (error) {
                 console.log(error);
@@ -388,15 +386,15 @@ export default function Agendamento() {
                             </Campo>
                         </div>
 
-                        <Campo icon={Sparkles} label="Serviço">
+                        <Campo icon={Sparkles} label="Serviço" required error={erro(horario)}>
                             <div className="af-select-wrap">
                                 <select
-                                    className="af-select"
+                                    className={`af-select ${erro(servicoValueId) ? 'af-invalid' : ''}`}
                                     value={servicoValueId}
                                     onChange={(e) => setServicoValueId(e.target.value)}
                                 >
                                     <option value="">
-                                        {SERVICOS.length ? 'Selecione um serviço' : 'Carregando serviços'}
+                                        {SERVICOS ? 'Selecione um serviço' : 'Carregando serviços'}
                                     </option>
                                     {SERVICOS.map((s) => (
                                         <option key={s.id} value={s.id}>R${s.valor} - {s.nome} </option>
