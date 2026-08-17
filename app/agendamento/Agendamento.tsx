@@ -129,8 +129,6 @@ export default function Agendamento() {
     return (
         <div className="af-page">
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600&display=swap');
-
         .af-page {
           min-height: 100vh;
           width: 100%;
@@ -141,7 +139,6 @@ export default function Agendamento() {
           align-items: center;
           justify-content: center;
           padding: 3rem 1.25rem;
-          font-family: 'Space Grotesk', sans-serif;
         }
         .af-card {
           width: 100%;
@@ -163,7 +160,6 @@ export default function Agendamento() {
           margin-bottom: 0.6rem;
         }
         .af-title {
-          font-family: 'Fraunces', serif;
           font-weight: 600;
           font-size: 2.15rem;
           color: #202A22;
@@ -213,7 +209,6 @@ export default function Agendamento() {
           border: none;
           border-bottom: 2px solid #D8D2C0;
           padding: 0.5rem 0.1rem 0.6rem;
-          font-family: 'Space Grotesk', sans-serif;
           font-size: 0.98rem;
           color: #202A22;
           outline: none;
