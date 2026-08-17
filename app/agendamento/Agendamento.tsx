@@ -3,12 +3,10 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { User, Phone, MapPin, CalendarDays, Clock3, Sparkles, ChevronDown, Check, type LucideIcon } from 'lucide-react';
 import { api } from '@/utils/api';
+import { serviceGetType } from '@/types/serviceGetType';
 
 // Preencher horários conforme a agenda real do estabelecimento
 const HORARIOS = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-
-// Deixado vazio — adicionar aqui as opções de serviço quando definidas
-const SERVICOS: string[] = [];
 
 function formatarTelefone(valor: string): string {
     const digitos = valor.replace(/\D/g, '').slice(0, 11);
@@ -51,10 +49,10 @@ export default function Agendamento() {
     const [endereco, setEndereco] = useState('');
     const [data, setData] = useState('');
     const [horario, setHorario] = useState('');
-    const [servico, setServico] = useState('');
+    const [servicoValueId, setServicoValueId] = useState(''); // valor do select
+    const [SERVICOS, setSERVICOS] = useState<serviceGetType[]>([]);
     const [tentouEnviar, setTentouEnviar] = useState(false);
     const [confirmado, setConfirmado] = useState(false);
-    const [servicoId, setServicoId] = useState(1);
     const [valor, setValor] = useState(35.00);
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([''])
 
@@ -73,7 +71,6 @@ export default function Agendamento() {
         setEndereco('');
         setData('');
         setHorario('');
-        setServico('');
         setTentouEnviar(false);
         setConfirmado(false);
     }
@@ -87,7 +84,7 @@ export default function Agendamento() {
                 nome: nome,
                 telefone: telefone,
                 endereco: endereco,
-                servico_id: servicoId,
+                servico_id: servicoValueId,
                 data: data,              // formato: "2026-08-15"
                 hora: horario,              // formato: "10:00"
                 valor_na_epoca: valor
@@ -103,20 +100,36 @@ export default function Agendamento() {
     // requisição para obter as horas já cadastradas
     useEffect(() => {
         async function GetHorario() {
-            if(!data) return
-             try {
+            if (!data) return
+            try {
                 const res = await api.get(`/api/horario_disponivel?data=${data}`); // res.data vem assim: [{hora:"08:00:00"}, {hora:"10:00:00"}]
                 const horariosAgendados = res.data.map((item: any) => item.hora.slice(0, 5)); // transforma em ["08:00", "10:00"]
                 const disponiveis = HORARIOS.filter(item => !horariosAgendados.includes(item))  // compara com a lista fixa
                 setHorariosDisponiveis(disponiveis)
-                console.log(disponiveis);   
-
             } catch (error) {
                 console.log('erro de horario' + error);
             }
         }
         GetHorario()
     }, [data])
+
+
+    /*
+        servico, setServico
+    */
+    // req para obter os serviços
+    useEffect(() => {
+        async function solicitaServico() {
+            try {
+                const res = await api.get('/api/servico')
+                setSERVICOS(res.data)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        solicitaServico()
+    }, [])
+
 
 
     // pegando o dia atual
@@ -290,6 +303,9 @@ export default function Agendamento() {
         }
       `}</style>
 
+
+
+
             <div className="af-card">
                 <div className="af-eyebrow">Ficha de agendamento</div>
                 <h1 className="af-title">Agendamento</h1>
@@ -375,14 +391,14 @@ export default function Agendamento() {
                             <div className="af-select-wrap">
                                 <select
                                     className="af-select"
-                                    value={servico}
-                                    onChange={(e) => setServico(e.target.value)}
+                                    value={servicoValueId}
+                                    onChange={(e) => setServicoValueId(e.target.value)}
                                 >
                                     <option value="">
-                                        {SERVICOS.length ? 'Selecione um serviço' : 'A definir'}
+                                        {SERVICOS.length ? 'Selecione um serviço' : 'Carregando serviços'}
                                     </option>
                                     {SERVICOS.map((s) => (
-                                        <option key={s} value={s}>{s}</option>
+                                        <option key={s.id} value={s.id}>R${s.valor} - {s.nome} </option>
                                     ))}
                                 </select>
                                 <ChevronDown size={16} className="af-select-chevron" />

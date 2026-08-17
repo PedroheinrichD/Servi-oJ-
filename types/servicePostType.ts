@@ -1,4 +1,4 @@
-export type serviceType = {
+export type servicePostType = {
     id: number,
     nome: string,
     descricao: string,
