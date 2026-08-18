@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Admin() {
   return (
-    <main className="bg-background min-h-screen flex flex-col justify-center items-center px-4 text-on-background relative">
+    <main className="bg-bgAll min-h-screen flex flex-col justify-center items-center px-4 text-on-background relative">
       <Link href="/" className=" absolute top-10 right-5">
         <ArrowLeft/>
       </Link>

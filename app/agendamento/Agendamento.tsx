@@ -146,7 +146,7 @@ export default function Agendamento() {
         .af-page {
           min-height: 100vh;
           width: 100%;
-          background-color: #E7E2D3;
+          background-color: #FBF9F4;
           background-image: radial-gradient(circle at 1px 1px, rgba(32,42,34,0.07) 1px, transparent 0);
           background-size: 22px 22px;
           display: flex;
@@ -157,10 +157,8 @@ export default function Agendamento() {
         .af-card {
           width: 100%;
           max-width: 560px;
-          background-color: #FAF8F2;
           border-radius: 4px;
           padding: 3rem 2.75rem;
-          box-shadow: 0 30px 60px -25px rgba(32,42,34,0.35);
         }
         @media (max-width: 480px) {
           .af-card { padding: 2.25rem 1.5rem; }
@@ -254,7 +252,6 @@ export default function Agendamento() {
           color: #F1EEE3;
           border: none;
           padding: 0.9rem 1.5rem;
-          font-family: 'Space Grotesk', sans-serif;
           font-weight: 600;
           font-size: 0.85rem;
           letter-spacing: 0.06em;
@@ -309,7 +306,7 @@ export default function Agendamento() {
 
             <div className="af-card">
                 <div className="af-eyebrow">Ficha de agendamento</div>
-                <h1 className="af-title">Agendamento</h1>
+                <h1 className="af-title tracking-[0.05em]">Agendamento</h1>
                 <p className="af-subtitle">Preencha os dados abaixo para reservar seu horário. Os campos marcados com * são obrigatórios.</p>
 
                 {confirmado && (
