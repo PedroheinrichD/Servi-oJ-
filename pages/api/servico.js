@@ -2,7 +2,7 @@ import pool from "../../lib/db";
 
 export default async function handler(req, res) {
   try {
-    const [rows] = await pool.query('SELECT * FROM servicos WHERE ativo = 1');
+    const [rows] = await pool.query('SELECT * FROM servicos');
     res.status(200).json(rows)
   } catch (error) {
     console.log(error);

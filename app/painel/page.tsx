@@ -47,7 +47,7 @@ export default function Painel() {
 
   async function handleAddService() {
     try {
-      const req = await api.post('/adicionar_servico', {
+      const req = await api.post('/api/adicionar_servico', {
         nome: nome,
         descricao: descricao,
         valor: valueAsNumber,
