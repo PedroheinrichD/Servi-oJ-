@@ -1,8 +1,42 @@
+"use client"
 import { Button } from "@/components/button";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
+import React, { useRef, useState } from "react";
 
 export default function Painel() {
+  const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
+  const [images, setImages] = useState<string[]>([]);
+
+  async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
+    const urls: string[] = [] // é do tipo array de string e começa vazio
+    const files = event.target.files
+
+    if (!files) return
+
+    for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
+      // mandar um formulario de dados
+      const data = new FormData();
+
+      data.append("file", file)
+      data.append("upload_preset", "fotos_admin")
+
+      const req = await fetch("https://api.cloudinary.com/v1_1/gomwgnhb/image/upload", {
+        method: "POST",
+        body: data
+      })
+      const uploadImageUrl = await req.json();
+
+      urls.push(uploadImageUrl.url)
+    }
+
+    setImages(urls)
+  }
+console.log(images);
+
+  
+
+
   return (
     <main className="p-6 space-y-16 bg-bgAll min-h-screen">
       <Link href="/" className=" absolute top-10 right-5">
@@ -77,6 +111,40 @@ export default function Painel() {
           ></textarea>
         </div>
 
+        {/*seção para adicionar imagens*/}
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="file"
+            className="text-xs font-semibold uppercase tracking-wider text-[#4b4a45]"
+          >
+            Adicionar imagem
+          </label>
+
+          <div className="flex flex-col justify-center gap-3 rounded-md border border-[#dedad1] bg-[#f1efe9] px-3 py-2">
+            <button
+              onClick={() => inputRef.current?.click()}
+              type="button"
+              className="shrink-0 rounded-[4px] bg-[#23241f] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-[#33342d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#23241f] focus-visible:ring-offset-2"
+            >
+              Escolher arquivo
+            </button>
+
+            <span className="text-center truncate text-sm text-[#8a8579]">
+              Nenhum arquivo escolhido
+            </span>
+
+            <input
+              ref={inputRef}
+              onChange={handleFileInput}
+              multiple
+              type="file"
+              name="file"
+              id="file"
+              className="sr-only"
+            />
+          </div>
+        </div>
+
         <Button name="Adicionar Serviço" />
 
         {/*seção de listagem dos serviços adicionados UI*/}
@@ -84,8 +152,8 @@ export default function Painel() {
           <div className="flex justify-between">
             <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
             <div className="flex gap-4">
-              <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer"/>
-              <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer"/>
+              <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
+              <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
             </div>
           </div>
 
