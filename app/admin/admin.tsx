@@ -58,7 +58,7 @@ export default function Admin() {
           </div>
 
           <div className="pt-4">
-            <Button />
+            <Button name="ENTRAR" />
           </div>
         </form>
       </div>

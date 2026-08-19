@@ -8,6 +8,8 @@ export default function Home() {
       <Link href="/agendamento">agendar</Link>
 
       <Link href="/admin">admin</Link>
+
+      <Link href="/painel">painel</Link>
     </div>
   );
 }
