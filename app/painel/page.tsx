@@ -7,9 +7,12 @@ import React, { useRef, useState } from "react";
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
   const [images, setImages] = useState<string[]>([]);
+  const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
+
 
   async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
     const urls: string[] = [] // é do tipo array de string e começa vazio
+    const nomes: string[] = [] // é do tipo array de string e começa vazio
     const files = event.target.files
 
     if (!files) return
@@ -28,13 +31,15 @@ export default function Painel() {
       const uploadImageUrl = await req.json();
 
       urls.push(uploadImageUrl.url)
+      nomes.push(uploadImageUrl.display_name)
     }
 
+    setNomeArquivo(nomes)
     setImages(urls)
   }
-console.log(images);
+  console.log(images);
 
-  
+
 
 
   return (
@@ -129,8 +134,13 @@ console.log(images);
               Escolher arquivo
             </button>
 
-            <span className="text-center truncate text-sm text-[#8a8579]">
-              Nenhum arquivo escolhido
+            <span className="text-center text-sm text-[#8a8579]">
+              {nomeArquivo.length === 0
+                ? 'Nenhuma imagem selecionada'
+                : nomeArquivo.length === 1
+                  ? nomeArquivo[0]
+                  : `${nomeArquivo.length} imagens selecionadas`
+              }
             </span>
 
             <input
@@ -147,7 +157,9 @@ console.log(images);
 
         <Button name="Adicionar Serviço" />
 
-        {/*seção de listagem dos serviços adicionados UI*/}
+
+      </section>
+       {/*seção de listagem dos serviços adicionados UI*/}
         <section className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
           <div className="flex justify-between">
             <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
@@ -161,8 +173,20 @@ console.log(images);
             <p>preço</p>
             <p>R$ 100,00</p>
           </div>
+
+          <div className="flex justify-between">
+            <span className="text-sm text-[#8a8579]">
+              {nomeArquivo.length === 0
+                ? 'Nenhuma imagem selecionada'
+                : nomeArquivo.length === 1
+                  ? nomeArquivo[0]
+                  : `${nomeArquivo.length} imagens selecionadas`
+              }
+            </span>
+            <span>detalhes</span>
+          </div>
+
         </section>
-      </section>
     </main>
   );
 }
