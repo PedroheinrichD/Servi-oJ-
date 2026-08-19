@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/button";
+import { api } from "@/utils/api";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
@@ -8,6 +9,12 @@ export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
   const [images, setImages] = useState<string[]>([]);
   const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
+  const [nome, setNome] = useState('')
+  const [descricao, setDescricao] = useState('')
+  const [valor, setValor] = useState('')
+  const valueAsNumber = Number(valor) // conversão para numero
+
+
 
 
   async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
@@ -37,7 +44,19 @@ export default function Painel() {
     setNomeArquivo(nomes)
     setImages(urls)
   }
-  console.log(images);
+
+  async function handleAddService() {
+    try {
+      const req = await api.post('/adicionar_servico', {
+        nome: nome,
+        descricao: descricao,
+        valor: valueAsNumber,
+      })
+    } catch(error){
+      console.log(error);
+      
+    }
+  }
 
 
 
@@ -77,6 +96,8 @@ export default function Painel() {
             nome do servico
           </label>
           <input
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
             type="text"
             name="nomeServico"
             id="nomeServico"
@@ -93,6 +114,8 @@ export default function Painel() {
             preco (R$)
           </label>
           <input
+            value={valor}
+            onChange={(e) => setValor(e.target.value)}
             type="number"
             name="precoServico"
             id="precoServico"
@@ -109,6 +132,8 @@ export default function Painel() {
             descrição
           </label>
           <textarea
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
             name="descricaoServico"
             id="descricaoServico"
             placeholder="EX.: neste pacote você terá direito a..."
@@ -155,38 +180,37 @@ export default function Painel() {
           </div>
         </div>
 
-        <Button name="Adicionar Serviço" />
+        <Button onclick={handleAddService} name="Adicionar Serviço" />
 
 
       </section>
-       {/*seção de listagem dos serviços adicionados UI*/}
-        <section className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
-          <div className="flex justify-between">
-            <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
-            <div className="flex gap-4">
-              <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
-              <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
-            </div>
+      {/*seção de listagem dos serviços adicionados UI*/}
+      <section className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
+        <div className="flex justify-between">
+          <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
+          <div className="flex gap-4">
+            <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
+            <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
           </div>
+        </div>
 
-          <div className="flex justify-between">
-            <p>preço</p>
-            <p>R$ 100,00</p>
-          </div>
+        <div className="flex justify-between">
+          <p>preço</p>
+          <p>R$ 100,00</p>
+        </div>
 
-          <div className="flex justify-between">
-            <span className="text-sm text-[#8a8579]">
-              {nomeArquivo.length === 0
-                ? 'Nenhuma imagem selecionada'
-                : nomeArquivo.length === 1
-                  ? nomeArquivo[0]
-                  : `${nomeArquivo.length} imagens selecionadas`
-              }
-            </span>
-            <span>detalhes</span>
-          </div>
-
-        </section>
+        <div>
+          <span className="text-sm text-[#8a8579]">
+            {nomeArquivo.length === 0
+              ? 'Nenhuma imagem selecionada'
+              : nomeArquivo.length === 1
+                ? nomeArquivo[0]
+                : `${nomeArquivo.length} imagens selecionadas`
+            }
+          </span>
+        </div>
+        <span className="border-b">detalhes</span>
+      </section>
     </main>
   );
 }
