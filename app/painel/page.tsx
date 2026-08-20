@@ -15,7 +15,7 @@ export default function Painel() {
 
   const [images, setImages] = useState<string[]>([]);
   const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
-  
+
   const [nome, setNome] = useState('') // nome do servico
   const [descricao, setDescricao] = useState('') // descrição do servico
   const [valor, setValor] = useState('') // valor do servico
@@ -25,11 +25,13 @@ export default function Painel() {
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
   const [successful, setSuccessful] = useState(false)
 
-  async function handleDelete(id: number){
-     await deleteService({id})
+  async function handleDelete(id: number) {
+    await deleteService({ id })
+    setServices((currentServices) =>
+      currentServices.filter(item => item.id !== id)
+    )
   }
- 
-  
+
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     fileInput({ event, setNomeArquivo, setImages });
   }
@@ -41,7 +43,7 @@ export default function Painel() {
 
   // monitora a variavel successful, se for true, chama a função cleanFields para limpar os campos
   useEffect(() => {
-    if(successful){
+    if (successful) {
       cleanFields({ setNome, setDescricao, setValor, setImages, setNomeArquivo })
     }
   }, [successful])
