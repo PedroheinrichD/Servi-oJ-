@@ -1,19 +1,21 @@
 "use client"
 import { Button } from "@/components/button";
+import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
   const [images, setImages] = useState<string[]>([]);
   const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
-  const [nome, setNome] = useState('')
-  const [descricao, setDescricao] = useState('')
-  const [valor, setValor] = useState('')
+  const [nome, setNome] = useState('') // nome do servico
+  const [descricao, setDescricao] = useState('') // descrição do servico
+  const [valor, setValor] = useState('') // valor do servico
   const valueAsNumber = Number(valor) // conversão para numero
 
+  const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
 
 
 
@@ -24,6 +26,7 @@ export default function Painel() {
 
     if (!files) return
 
+      // req para enviar as fotos e devolver o link delas
     for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
       // mandar um formulario de dados
       const data = new FormData();
@@ -45,6 +48,7 @@ export default function Painel() {
     setImages(urls)
   }
 
+  // req para enviar dados dos servicos
   async function handleAddService() {
     try {
       const req = await api.post('/api/adicionar_servico', {
@@ -52,13 +56,24 @@ export default function Painel() {
         descricao: descricao,
         valor: valueAsNumber,
       })
-    } catch(error){
+    } catch (error) {
       console.log(error);
-      
     }
   }
 
-
+  // req para obter dados dos servicos e listar
+  useEffect(() => {
+    async function handleGetService() {
+      try {
+        const req = await api.get('/api/servico');
+        const result = await req.data;
+        setServices(result)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    handleGetService()
+  }, [])
 
 
   return (
@@ -181,10 +196,46 @@ export default function Painel() {
         </div>
 
         <Button onclick={handleAddService} name="Adicionar Serviço" />
-
-
       </section>
-      {/*seção de listagem dos serviços adicionados UI*/}
+
+      <section className="flex flex-col gap-8">
+        {services.map((s) => (
+          <div key={s.nome} className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
+            <div className="flex justify-between">
+              <h3 className="text-[1rem] font-semibold">{s.nome}</h3>
+              <div className="flex gap-4">
+                <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
+                <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <p>preço</p>
+              <p>{s.valor}</p>
+            </div>
+
+            <div>
+              <span className="text-sm text-[#8a8579]">
+                {nomeArquivo.length === 0
+                  ? 'Nenhuma imagem selecionada'
+                  : nomeArquivo.length === 1
+                    ? nomeArquivo[0]
+                    : `${nomeArquivo.length} imagens selecionadas`
+                }
+              </span>
+            </div>
+            <span className="border-b">detalhes</span>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+}
+
+
+/*
+      -------seção de listagem dos serviços adicionados UI-------
+
       <section className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
         <div className="flex justify-between">
           <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
@@ -211,6 +262,4 @@ export default function Painel() {
         </div>
         <span className="border-b">detalhes</span>
       </section>
-    </main>
-  );
-}
+*/
