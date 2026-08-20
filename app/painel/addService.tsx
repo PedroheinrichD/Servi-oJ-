@@ -33,6 +33,6 @@ export async function addService({ nome, descricao, valor, setMessage, setSucces
 
         setTimeout(() => {
             setSuccessful(false)
-        }, 4000);
+        }, 2000);
     }
 }

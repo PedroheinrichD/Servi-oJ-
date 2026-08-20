@@ -65,16 +65,23 @@ export default function Painel() {
 
   return (
     <main className="p-6 space-y-16 bg-bgAll min-h-screen relative">
-      <Link href="/" className=" absolute top-10 right-5">
+
+      <Link href="/" className="absolute top-10 right-5">
         <ArrowLeft />
       </Link>
 
 
       {successful &&
-        <div className="bg-green-200 gap-2 flex items-center fixed p-8 h-12 shadow-lg">
-          <Check width={30} height={30} className="stroke-green-500" />
-          <p>Serviço adicionado com sucesso</p>
-        </div>
+        <>
+          <div className="fixed w-full h-full inset-0 z-40 bg-black/50" aria-hidden="true" />
+          <div
+            role="alert"
+            className="fixed left-1/2 top-1/2 z-50 flex shadow-lg -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-lg border-l-4 border-green-500 bg-green-100 p-4 w-70 text-green-900"
+          >
+            <Check width={30} height={30} className="stroke-green-500" />
+            <p className="text-md font-semibold">Serviço adicionado com sucesso</p>
+          </div>
+        </>
       }
 
 
