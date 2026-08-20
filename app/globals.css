@@ -37,3 +37,11 @@ body {
 .font-title {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
+
+.errorMessage{
+  font-size: 12px;
+  margin: 4px 0px 0px 4px;
+  color: #f52e0b;
+}
+
+

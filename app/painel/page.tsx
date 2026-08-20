@@ -2,7 +2,7 @@
 import { Button } from "@/components/button";
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -14,9 +14,19 @@ export default function Painel() {
   const [descricao, setDescricao] = useState('') // descrição do servico
   const [valor, setValor] = useState('') // valor do servico
   const valueAsNumber = Number(valor) // conversão para numero
+  const [message, setMessage] = useState('') // mensagem para o usuario
 
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
+  const [successful, setSuccessful] = useState(false)
 
+  // limpa campos ao chamar
+  function cleanFields() {
+    setNome('')
+    setDescricao('')
+    setValor('')
+    setImages([]);
+    setNomeArquivo([]);
+  }
 
 
   async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
@@ -26,7 +36,7 @@ export default function Painel() {
 
     if (!files) return
 
-      // req para enviar as fotos e devolver o link delas
+    // req para enviar as fotos e devolver o link delas
     for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
       // mandar um formulario de dados
       const data = new FormData();
@@ -50,14 +60,29 @@ export default function Painel() {
 
   // req para enviar dados dos servicos
   async function handleAddService() {
+    if (nome === '' || descricao === '' || valor === '') {
+      setMessage('Campo vazio! Porfavor preencha')
+      return
+    }
+
+    setMessage('')
     try {
       const req = await api.post('/api/adicionar_servico', {
         nome: nome,
         descricao: descricao,
         valor: valueAsNumber,
       })
+
+      setSuccessful(true)
+      cleanFields()
+
     } catch (error) {
       console.log(error);
+    } finally {
+
+      setTimeout(() => {
+        setSuccessful(false)
+      }, 4000);
     }
   }
 
@@ -77,10 +102,19 @@ export default function Painel() {
 
 
   return (
-    <main className="p-6 space-y-16 bg-bgAll min-h-screen">
+    <main className="p-6 space-y-16 bg-bgAll min-h-screen relative">
       <Link href="/" className=" absolute top-10 right-5">
         <ArrowLeft />
       </Link>
+
+
+      {successful &&
+        <div className="bg-green-200 gap-2 flex items-center fixed px-8 h-12 shadow-lg">
+          <Check width={30} height={30} className="stroke-green-500" />
+          <p>Serviço adicionado com sucesso</p>
+        </div>
+      }
+
 
       <header className="flex flex-col">
         <h3 className="text-textTitle">BOM DIA,</h3>
@@ -119,6 +153,7 @@ export default function Painel() {
             placeholder="EX.: pacote de unhas"
             className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
+          {nome === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
         </div>
 
         <div className="flex flex-col">
@@ -137,6 +172,7 @@ export default function Painel() {
             placeholder="EX.: 100,00"
             className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
+          {valor === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
         </div>
 
         <div className="flex flex-col">
@@ -154,6 +190,7 @@ export default function Painel() {
             placeholder="EX.: neste pacote você terá direito a..."
             className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500 h-32"
           ></textarea>
+          {descricao === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
         </div>
 
         {/*seção para adicionar imagens*/}
