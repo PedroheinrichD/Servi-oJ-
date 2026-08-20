@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import { ArrowLeft, Check, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { cleanFields } from "./cleanFields";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
@@ -19,16 +20,8 @@ export default function Painel() {
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
   const [successful, setSuccessful] = useState(false)
 
-  // limpa campos ao chamar
-  function cleanFields() {
-    setNome('')
-    setDescricao('')
-    setValor('')
-    setImages([]);
-    setNomeArquivo([]);
-  }
 
-
+  // req para enviar as fotos e devolver o link delas
   async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
     const urls: string[] = [] // é do tipo array de string e começa vazio
     const nomes: string[] = [] // é do tipo array de string e começa vazio
@@ -36,7 +29,6 @@ export default function Painel() {
 
     if (!files) return
 
-    // req para enviar as fotos e devolver o link delas
     for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
       // mandar um formulario de dados
       const data = new FormData();
@@ -74,7 +66,7 @@ export default function Painel() {
       })
 
       setSuccessful(true)
-      cleanFields()
+      cleanFields({ setNome, setDescricao, setValor, setImages, setNomeArquivo })
 
     } catch (error) {
       console.log(error);
