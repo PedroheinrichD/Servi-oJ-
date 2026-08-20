@@ -8,20 +8,28 @@ import React, { useEffect, useRef, useState } from "react";
 import { addService } from "./addService";
 import { cleanFields } from "./cleanFields";
 import { fileInput } from "./fileInput";
+import { deleteService } from "./deleteService";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
+
   const [images, setImages] = useState<string[]>([]);
   const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
+  
   const [nome, setNome] = useState('') // nome do servico
   const [descricao, setDescricao] = useState('') // descrição do servico
   const [valor, setValor] = useState('') // valor do servico
+
   const [message, setMessage] = useState('') // mensagem para o usuario
 
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
   const [successful, setSuccessful] = useState(false)
 
-
+  async function handleDelete(id: number){
+     await deleteService({id})
+  }
+ 
+  
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     fileInput({ event, setNomeArquivo, setImages });
   }
@@ -194,7 +202,7 @@ export default function Painel() {
               <h3 className="text-[1rem] font-semibold">{s.nome}</h3>
               <div className="flex gap-4">
                 <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
-                <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
+                <Trash2 onClick={() => handleDelete(s.id)} height={20} className="hover:stroke-red-500 cursor-pointer" />
               </div>
             </div>
 
