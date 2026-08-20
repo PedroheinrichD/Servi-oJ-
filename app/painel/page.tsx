@@ -2,10 +2,12 @@
 import { Button } from "@/components/button";
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Check, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, FileInput, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { addService } from "./addService";
 import { cleanFields } from "./cleanFields";
+import { fileInput } from "./fileInput";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
@@ -14,69 +16,27 @@ export default function Painel() {
   const [nome, setNome] = useState('') // nome do servico
   const [descricao, setDescricao] = useState('') // descrição do servico
   const [valor, setValor] = useState('') // valor do servico
-  const valueAsNumber = Number(valor) // conversão para numero
   const [message, setMessage] = useState('') // mensagem para o usuario
 
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
   const [successful, setSuccessful] = useState(false)
 
 
-  // req para enviar as fotos e devolver o link delas
-  async function handleFileInput(event: React.ChangeEvent<HTMLInputElement>) {
-    const urls: string[] = [] // é do tipo array de string e começa vazio
-    const nomes: string[] = [] // é do tipo array de string e começa vazio
-    const files = event.target.files
-
-    if (!files) return
-
-    for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
-      // mandar um formulario de dados
-      const data = new FormData();
-
-      data.append("file", file)
-      data.append("upload_preset", "fotos_admin")
-
-      const req = await fetch("https://api.cloudinary.com/v1_1/gomwgnhb/image/upload", {
-        method: "POST",
-        body: data
-      })
-      const uploadImageUrl = await req.json();
-
-      urls.push(uploadImageUrl.url)
-      nomes.push(uploadImageUrl.display_name)
-    }
-
-    setNomeArquivo(nomes)
-    setImages(urls)
+  function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+    fileInput({ event, setNomeArquivo, setImages });
   }
 
-  // req para enviar dados dos servicos
-  async function handleAddService() {
-    if (nome === '' || descricao === '' || valor === '') {
-      setMessage('Campo vazio! Porfavor preencha')
-      return
-    }
+  // função que chama as funções handleAddService e cleanFields 
+  function handleButton() {
+    addService({ nome, descricao, valor, setMessage, setSuccessful })
+  }
 
-    setMessage('')
-    try {
-      const req = await api.post('/api/adicionar_servico', {
-        nome: nome,
-        descricao: descricao,
-        valor: valueAsNumber,
-      })
-
-      setSuccessful(true)
+  // monitora a variavel successful, se for true, chama a função cleanFields para limpar os campos
+  useEffect(() => {
+    if(successful){
       cleanFields({ setNome, setDescricao, setValor, setImages, setNomeArquivo })
-
-    } catch (error) {
-      console.log(error);
-    } finally {
-
-      setTimeout(() => {
-        setSuccessful(false)
-      }, 4000);
     }
-  }
+  }, [successful])
 
   // req para obter dados dos servicos e listar
   useEffect(() => {
@@ -101,7 +61,7 @@ export default function Painel() {
 
 
       {successful &&
-        <div className="bg-green-200 gap-2 flex items-center fixed px-8 h-12 shadow-lg">
+        <div className="bg-green-200 gap-2 flex items-center fixed p-8 h-12 shadow-lg">
           <Check width={30} height={30} className="stroke-green-500" />
           <p>Serviço adicionado com sucesso</p>
         </div>
@@ -198,7 +158,7 @@ export default function Painel() {
             <button
               onClick={() => inputRef.current?.click()}
               type="button"
-              className="shrink-0 rounded-[4px] bg-[#23241f] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-[#33342d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#23241f] focus-visible:ring-offset-2"
+              className="shrink-0 rounded-md bg-[#23241f] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-[#33342d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#23241f] focus-visible:ring-offset-2"
             >
               Escolher arquivo
             </button>
@@ -214,7 +174,7 @@ export default function Painel() {
 
             <input
               ref={inputRef}
-              onChange={handleFileInput}
+              onChange={handleFile}
               multiple
               type="file"
               name="file"
@@ -224,12 +184,12 @@ export default function Painel() {
           </div>
         </div>
 
-        <Button onclick={handleAddService} name="Adicionar Serviço" />
+        <Button onclick={handleButton} name="Adicionar Serviço" />
       </section>
 
       <section className="flex flex-col gap-8">
         {services.map((s) => (
-          <div key={s.nome} className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
+          <div key={s.id} className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
             <div className="flex justify-between">
               <h3 className="text-[1rem] font-semibold">{s.nome}</h3>
               <div className="flex gap-4">
