@@ -15,11 +15,12 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
         <div key={s.id} className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-xl">
           {/* Imagens */}
           <div className="relative">
-            <ImageCarousel
+           {s.lista_url &&  
+           <ImageCarousel
               images={s.lista_url.split(",")}
               alt={s.nome}
               intervalMs={3000}
-            />
+            />}
             <button
               aria-label="Fechar"
               onClick={closeDetails}
