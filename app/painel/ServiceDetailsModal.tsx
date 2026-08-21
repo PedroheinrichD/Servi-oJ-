@@ -1,5 +1,6 @@
 import { serviceType } from "@/types/serviceType";
-import { Clock, CreditCard, Pencil, Trash2, X } from "lucide-react";
+import { CreditCard, Pencil, Trash2, X } from "lucide-react";
+import ImageCarousel from "./ImageCarousel";
 
 
 type detailsProps = {
@@ -12,18 +13,19 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 h-full">
       {servicedetails.map((s) => (
         <div key={s.id} className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-xl">
-          {/* Imagem */}
-          <div className="relative h-44 w-full">
-            <img
-              src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80&auto=format&fit=crop"
-              alt="Massagem Relaxante"
-              className="h-full w-full object-cover"
+          {/* Imagens */}
+          <div className="relative">
+            <ImageCarousel
+              images={s.lista_url.split(",")}
+              alt={s.nome}
+              intervalMs={3000}
             />
             <button
               aria-label="Fechar"
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-sm transition hover:bg-white"
+              onClick={closeDetails}
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-sm transition hover:bg-white"
             >
-              <X size={16} strokeWidth={2.5} onClick={closeDetails}/>
+              <X size={16} strokeWidth={2.5} />
             </button>
           </div>
 
@@ -33,12 +35,6 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
 
             {/* Badges */}
             <div className="mt-3 flex items-center gap-2">
-              {/*
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-700">
-                <Clock size={13} />
-                  60 min
-              </span>
-            */}
               <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-700">
                 <CreditCard size={13} />
                 R$ {s.valor}
@@ -51,7 +47,7 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
                 DESCRIÇÃO
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-gray-600">
-               {s.descricao}
+                {s.descricao}
               </p>
             </div>
 
@@ -67,10 +63,10 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
               </button>
             </div>
 
-            <button 
+            <button
               className="mt-4 w-full text-center text-sm font-medium text-gray-400 transition hover:text-gray-600"
               onClick={closeDetails}
-              >
+            >
               FECHAR
             </button>
           </div>
