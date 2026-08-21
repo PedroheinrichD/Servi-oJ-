@@ -12,18 +12,18 @@ import { deleteService } from "./deleteService";
 import ServiceDetailsModal from "./ServiceDetailsModal";
 
 export default function Painel() {
-  const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const [images, setImages] = useState<string[]>([]);
   const [nomeArquivo, setNomeArquivo] = useState<string[]>([])
 
-  const [nome, setNome] = useState('') // nome do servico
-  const [descricao, setDescricao] = useState('') // descrição do servico
-  const [valor, setValor] = useState('') // valor do servico
+  const [nome, setNome] = useState('')
+  const [descricao, setDescricao] = useState('')
+  const [valor, setValor] = useState('')
 
-  const [message, setMessage] = useState('') // mensagem para o usuario
+  const [message, setMessage] = useState('')
 
-  const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
+  const [services, setServices] = useState<serviceType[]>([])
   const [servicesDetails, setServicedetails] = useState<serviceType[]>([])
 
   const [successful, setSuccessful] = useState(false)
@@ -37,34 +37,31 @@ export default function Painel() {
       currentServices.filter(item => item.id !== id)
     )
   }
-  
+
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     fileInput({ event, setNomeArquivo, setImages });
   }
-  
-  // função que chama as funções handleAddService e cleanFields 
+
   function addServiceButton() {
     addService({ nome, descricao, valor, setMessage, setSuccessful, images })
   }
 
-  function closeDetails(){
+  function closeDetails() {
     setIsModal(false)
   }
 
-  // quando o admin clicar em detalhes, abre modal com os detalhes daquele servico 
   function openDetails(id: number) {
     setIsModal(true)
     const Resultfilter = services.filter((item) => item.id === id)
     setServicedetails(Resultfilter)
   }
-  // monitora a variavel successful, se for true, chama a função cleanFields para limpar os campos
+
   useEffect(() => {
     if (successful) {
       cleanFields({ setNome, setDescricao, setValor, setImages, setNomeArquivo })
     }
   }, [successful])
 
-  // req para obter dados dos servicos e listar
   useEffect(() => {
     async function handleGetService() {
       try {
@@ -80,215 +77,273 @@ export default function Painel() {
 
 
   return (
-    <main className="p-6 space-y-16 bg-bgAll min-h-screen relative">
+    <main className="min-h-screen bg-[#faf9f7] text-[#1c1917]">
 
-      <Link href="/" className="absolute top-10 right-5">
-        <ArrowLeft />
-      </Link>
-
-
-      {successful &&
-        <>
-          <div className="fixed w-full h-full inset-0 z-40 bg-black/50" aria-hidden="true" />
+      {/* Modal de sucesso */}
+      {successful && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
           <div
             role="alert"
-            className="fixed left-1/2 top-1/2 z-50 flex shadow-lg -translate-x-1/2 -translate-y-1/2 items-center gap-2 rounded-lg border-l-4 border-green-500 bg-green-100 p-4 w-70 text-green-900"
+            className="relative z-10 flex items-center gap-4 rounded-2xl border border-green-100 bg-white px-8 py-6 shadow-2xl"
           >
-            <Check width={30} height={30} className="stroke-green-500" />
-            <p className="text-md font-semibold">Serviço adicionado com sucesso</p>
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-50">
+              <Check className="h-6 w-6 text-green-600" strokeWidth={2.5} />
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-green-800">Sucesso</p>
+              <p className="text-sm text-green-600">Serviço adicionado com sucesso</p>
+            </div>
           </div>
-        </>
-      }
+        </div>
+      )}
 
-      {isModal &&
-        <>
-          <div className="fixed w-full h-full inset-0 z-40 bg-black/50" aria-hidden="true" />
-          <ServiceDetailsModal 
+      {/* Modal de detalhes */}
+      {isModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
+          <ServiceDetailsModal
             handleDelete={handleDelete}
-            closeDetails={closeDetails} 
+            closeDetails={closeDetails}
             servicedetails={servicesDetails}
           />
-        </>
-      }
+        </div>
+      )}
 
+      <div className="mx-auto max-w-3xl px-6 py-12">
 
-      <header className="flex flex-col">
-        <h3 className="text-textTitle">BOM DIA,</h3>
-        <h1 className="text-3xl font-semibold font-title">Caroline</h1>
-      </header>
-
-      <div>
-        <h3 className="uppercase">visão geral</h3>
-        <div className="h-px w-full bg-bgMilitar mt-2" />
-      </div>
-
-      <section className="border border-borderBox rounded-lg px-4 py-4 space-y-4">
-        {/*seção para adicionar serviços UI*/}
-        <div>
-          <h3 className="text-[1.60rem] font-semibold font-title">
-            Gerenciar serviços
-          </h3>
-          <p className="text-[0.875rem]">
-            Adicione, edite ou remova os serviços disponíveis no catálogo.
-          </p>
+        {/* Header */}
+        <div className="mb-12 flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-[0.2em] text-textTitle">
+              Bom dia,
+            </p>
+            <h1 className="mt-1 font-serif text-4xl font-light text-[#1c1917]">
+              Caroline
+            </h1>
+          </div>
+          <Link
+            href="/"
+            className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#e7e5e4] bg-white text-[#78716c] transition-all hover:border-[#d6d3d1] hover:text-[#1c1917] hover:shadow-md"
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+          </Link>
         </div>
 
-        <div className="flex flex-col">
-          <label
-            htmlFor="nomeServico"
-            className="uppercase text-textLabel text-[0.875rem] font-medium mb-0.5"
-          >
-            nome do servico
-          </label>
-          <input
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            type="text"
-            name="nomeServico"
-            id="nomeServico"
-            placeholder="EX.: pacote de unhas"
-            className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-          {nome === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
-        </div>
-
-        <div className="flex flex-col">
-          <label
-            htmlFor="precoServico"
-            className="uppercase text-textLabel text-[0.875rem] font-medium mb-0.5"
-          >
-            preco (R$)
-          </label>
-          <input
-            value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            type="number"
-            name="precoServico"
-            id="precoServico"
-            placeholder="EX.: 100,00"
-            className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500"
-          />
-          {valor === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
-        </div>
-
-        <div className="flex flex-col">
-          <label
-            htmlFor="descricaoServico"
-            className="uppercase text-textLabel text-[0.875rem] font-medium mb-0.5"
-          >
-            descrição
-          </label>
-          <textarea
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            name="descricaoServico"
-            id="descricaoServico"
-            placeholder="EX.: neste pacote você terá direito a..."
-            className="bg-bgInput border border-borderBox rounded-lg py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-500 h-32"
-          ></textarea>
-          {descricao === '' ? <p className="errorMessage animate-pulse">{message}</p> : ''}
-        </div>
-
-        {/*seção para adicionar imagens*/}
-        <div className="flex flex-col gap-2">
-          <label
-            htmlFor="file"
-            className="text-xs font-semibold uppercase tracking-wider text-[#4b4a45]"
-          >
-            Adicionar imagem
-          </label>
-
-          <div className="flex flex-col justify-center gap-3 rounded-md border border-[#dedad1] bg-[#f1efe9] px-3 py-2">
-            <button
-              onClick={() => inputRef.current?.click()}
-              type="button"
-              className="shrink-0 rounded-md bg-[#23241f] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-[#33342d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#23241f] focus-visible:ring-offset-2"
-            >
-              Escolher arquivo
-            </button>
-
-            <span className="text-center text-sm text-[#8a8579]">
-              {nomeArquivo.length === 0
-                ? 'Nenhuma imagem selecionada'
-                : nomeArquivo.length === 1
-                  ? nomeArquivo[0]
-                  : `${nomeArquivo.length} imagens selecionadas`
-              }
-            </span>
-
-            <input
-              ref={inputRef}
-              onChange={handleFile}
-              multiple
-              type="file"
-              name="file"
-              id="file"
-              className="sr-only"
-            />
+        {/* Visão Geral */}
+        <div className="mb-10">
+          <div className="flex items-center gap-4">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#a8a29e]">
+              Visão Geral
+            </h2>
+            <div className="h-px flex-1 bg-[#e7e5e4]" />
           </div>
         </div>
 
-        <Button onclick={addServiceButton} name="Adicionar Serviço" />
-      </section>
+        {/* Formulário */}
+        <section className="mb-16 overflow-hidden rounded-3xl border border-[#e7e5e4] bg-white shadow-[0_1px_3px_0_rgb(0_0_0_/_0.02),0_1px_2px_-1px_rgb(0_0_0_/_0.02)]">
+          <div className="border-b border-[#f5f5f4] bg-[#fafaf9] px-8 py-6">
+            <h3 className="font-serif text-2xl font-light text-[#1c1917]">
+              Gerenciar serviços
+            </h3>
+            <p className="mt-1 text-sm leading-relaxed text-[#a8a29e]">
+              Adicione, edite ou remova os serviços disponíveis no catálogo.
+            </p>
+          </div>
 
-      <section className="flex flex-col gap-8">
-        {services.map((s) => (
-          <div key={s.id} className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
-            <div className="flex justify-between">
-              <h3 className="text-[1rem] font-semibold">{s.nome}</h3>
-              <div className="flex gap-4">
-                <Trash2 onClick={() => handleDelete(s.id)} height={20} className="hover:stroke-red-500 cursor-pointer" />
+          <div className="space-y-6 px-8 py-8">
+
+            {/* Nome */}
+            <div className="space-y-2">
+              <label
+                htmlFor="nomeServico"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#78716c]"
+              >
+                Nome do serviço
+              </label>
+              <input
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                type="text"
+                name="nomeServico"
+                id="nomeServico"
+                placeholder="Ex.: Pacote de unhas em gel"
+                className="w-full rounded-xl border border-[#e7e5e4] bg-[#fafaf9] px-5 py-3.5 text-[#1c1917] placeholder:text-[#d6d3d1] transition-all focus:border-[#c9a87c] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c9a87c]/10"
+              />
+              {nome === '' && message && (
+                <p className="errorMessage flex items-center gap-1.5 text-xs font-medium text-red-500 animate-pulse">
+                  <span className="h-1 w-1 rounded-full bg-red-500" />
+                  {message}
+                </p>
+              )}
+            </div>
+
+            {/* Preço */}
+            <div className="space-y-2">
+              <label
+                htmlFor="precoServico"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#78716c]"
+              >
+                Preço (R$)
+              </label>
+              <div className="relative">
+                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#a8a29e]">R$</span>
+                <input
+                  value={valor}
+                  onChange={(e) => setValor(e.target.value)}
+                  type="number"
+                  name="precoServico"
+                  id="precoServico"
+                  placeholder="0,00"
+                  className="w-full rounded-xl border border-[#e7e5e4] bg-[#fafaf9] py-3.5 pl-12 pr-5 text-[#1c1917] placeholder:text-[#d6d3d1] transition-all focus:border-[#c9a87c] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c9a87c]/10"
+                />
+              </div>
+              {valor === '' && message && (
+                <p className="errorMessage flex items-center gap-1.5 text-xs font-medium text-red-500 animate-pulse">
+                  <span className="h-1 w-1 rounded-full bg-red-500" />
+                  {message}
+                </p>
+              )}
+            </div>
+
+            {/* Descrição */}
+            <div className="space-y-2">
+              <label
+                htmlFor="descricaoServico"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#78716c]"
+              >
+                Descrição
+              </label>
+              <textarea
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+                name="descricaoServico"
+                id="descricaoServico"
+                placeholder="Descreva o que está incluso neste serviço..."
+                className="h-32 w-full resize-none rounded-xl border border-[#e7e5e4] bg-[#fafaf9] px-5 py-3.5 text-[#1c1917] placeholder:text-[#d6d3d1] transition-all focus:border-[#c9a87c] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c9a87c]/10"
+              />
+              {descricao === '' && message && (
+                <p className="errorMessage flex items-center gap-1.5 text-xs font-medium text-red-500 animate-pulse">
+                  <span className="h-1 w-1 rounded-full bg-red-500" />
+                  {message}
+                </p>
+              )}
+            </div>
+
+            {/* Upload de imagem */}
+            <div className="space-y-2">
+              <label
+                htmlFor="file"
+                className="block text-xs font-semibold uppercase tracking-wider text-[#78716c]"
+              >
+                Imagens do serviço
+              </label>
+              <div className="rounded-xl border border-dashed border-[#d6d3d1] bg-[#fafaf9] p-6 transition-colors hover:border-[#c9a87c] hover:bg-[#f5f5f4]">
+                <div className="flex flex-col items-center gap-4">
+                  <button
+                    onClick={() => inputRef.current?.click()}
+                    type="button"
+                    className="rounded-full bg-[#1c1917] px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-white transition-all hover:bg-[#292524] hover:shadow-lg active:scale-95"
+                  >
+                    Escolher arquivo
+                  </button>
+
+                  <span className="text-sm text-[#a8a29e]">
+                    {nomeArquivo.length === 0
+                      ? 'Nenhuma imagem selecionada'
+                      : nomeArquivo.length === 1
+                        ? nomeArquivo[0]
+                        : `${nomeArquivo.length} imagens selecionadas`
+                    }
+                  </span>
+
+                  <input
+                    ref={inputRef}
+                    onChange={handleFile}
+                    multiple
+                    type="file"
+                    name="file"
+                    id="file"
+                    className="sr-only"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="flex justify-between">
-              <p>preço</p>
-              <p>{s.valor}</p>
+            <div className="pt-2">
+              <Button onclick={addServiceButton} name="Adicionar Serviço" />
             </div>
-
-            <div>
-              <span className="text-sm text-[#8a8579]">
-                {s.quantidade_imagens === 1
-                  ? "1 imagem"
-                  : `${s.quantidade_imagens} imagens`}
-              </span>
-            </div>
-            <span onClick={() => openDetails(s.id)} className="border-b cursor-pointer">detalhes</span>
           </div>
-        ))}
-      </section>
+        </section>
+
+        {/* Lista de Serviços */}
+        <div className="mb-6 flex items-center gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#a8a29e]">
+            Serviços cadastrados
+          </h2>
+          <div className="h-px flex-1 bg-[#e7e5e4]" />
+          <span className="rounded-full bg-[#f5f5f4] px-3 py-1 text-xs font-medium text-[#78716c]">
+            {services.length}
+          </span>
+        </div>
+
+        <section className="space-y-4">
+          {services.map((s) => (
+            <div
+              key={s.id}
+              className="group relative overflow-hidden rounded-2xl border border-[#e7e5e4] bg-white p-6 transition-all hover:border-[#d6d3d1] hover:shadow-lg hover:shadow-black/5"
+            >
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <h3 className="font-serif text-xl font-light text-[#1c1917]">
+                    {s.nome}
+                  </h3>
+                  <p className="text-sm text-[#a8a29e]">
+                    {s.quantidade_imagens === 1
+                      ? "1 imagem anexada"
+                      : `${s.quantidade_imagens} imagens anexadas`}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => handleDelete(s.id)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-[#a8a29e] transition-all hover:bg-red-50 hover:text-red-500"
+                  title="Excluir serviço"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="mt-6 flex items-end justify-between">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wider text-[#a8a29e]">Preço</p>
+                  <p className="mt-0.5 font-serif text-2xl font-light text-[#1c1917]">
+                    R$ {s.valor}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => openDetails(s.id)}
+                  className="group/btn flex items-center gap-2 border-b border-[#c9a87c] pb-0.5 text-sm font-medium text-[#78716c] transition-all hover:text-[#1c1917]"
+                >
+                  Ver detalhes
+                  <span className="transition-transform group-hover/btn:translate-x-0.5">→</span>
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {services.length === 0 && (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#e7e5e4] bg-[#fafaf9] py-16 text-center">
+              <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#f5f5f4]">
+                <Pencil className="h-5 w-5 text-[#d6d3d1]" />
+              </div>
+              <p className="text-sm font-medium text-[#a8a29e]">Nenhum serviço cadastrado</p>
+              <p className="mt-1 text-xs text-[#d6d3d1]">Adicione seu primeiro serviço acima</p>
+            </div>
+          )}
+        </section>
+      </div>
     </main>
   );
 }
-
-
-/*
-      -------seção de listagem dos serviços adicionados UI-------
-
-      <section className="border bg-bgInput border-borderBox rounded-lg px-4 py-4 space-y-4">
-        <div className="flex justify-between">
-          <h3 className="text-[1rem] font-semibold">nome do serviço</h3>
-          <div className="flex gap-4">
-            <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
-            <Trash2 height={20} className="hover:stroke-red-500 cursor-pointer" />
-          </div>
-        </div>
-
-        <div className="flex justify-between">
-          <p>preço</p>
-          <p>R$ 100,00</p>
-        </div>
-
-        <div>
-          <span className="text-sm text-[#8a8579]">
-            {nomeArquivo.length === 0
-              ? 'Nenhuma imagem selecionada'
-              : nomeArquivo.length === 1
-                ? nomeArquivo[0]
-                : `${nomeArquivo.length} imagens selecionadas`
-            }
-          </span>
-        </div>
-        <span className="border-b">detalhes</span>
-      </section>
-*/
