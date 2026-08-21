@@ -2,7 +2,7 @@
 import { Button } from "@/components/button";
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Check, FileInput, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { addService } from "./addService";
@@ -222,12 +222,9 @@ export default function Painel() {
 
             <div>
               <span className="text-sm text-[#8a8579]">
-                {nomeArquivo.length === 0
-                  ? 'Nenhuma imagem selecionada'
-                  : nomeArquivo.length === 1
-                    ? nomeArquivo[0]
-                    : `${nomeArquivo.length} imagens selecionadas`
-                }
+                {s.quantidade_imagens === 1
+                  ? "1 imagem"
+                  : `${s.quantidade_imagens} imagens`}
               </span>
             </div>
             <span className="border-b">detalhes</span>
