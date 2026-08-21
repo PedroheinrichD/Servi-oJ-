@@ -6,9 +6,10 @@ import ImageCarousel from "./ImageCarousel";
 type detailsProps = {
   servicedetails: serviceType[]
   closeDetails: () => void
+  handleDelete: (id: number) => void
 }
 
-export default function ServiceDetailsModal({ servicedetails, closeDetails }: detailsProps) {
+export default function ServiceDetailsModal({ servicedetails, closeDetails, handleDelete }: detailsProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 h-full">
       {servicedetails.map((s) => (
@@ -58,7 +59,7 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails }: de
                 <Pencil size={15} />
                 EDITAR SERVIÇO
               </button>
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-300 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-50">
+              <button onClick={() => handleDelete(s.id)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-300 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-50">
                 <Trash2 size={15} />
                 EXCLUIR SERVIÇO
               </button>

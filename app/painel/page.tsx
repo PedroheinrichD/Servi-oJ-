@@ -31,6 +31,7 @@ export default function Painel() {
 
 
   async function handleDelete(id: number) {
+    setIsModal(false)
     await deleteService({ id })
     setServices((currentServices) =>
       currentServices.filter(item => item.id !== id)
@@ -50,7 +51,6 @@ export default function Painel() {
     setIsModal(false)
   }
 
-  
   // quando o admin clicar em detalhes, abre modal com os detalhes daquele servico 
   function openDetails(id: number) {
     setIsModal(true)
@@ -104,6 +104,7 @@ export default function Painel() {
         <>
           <div className="fixed w-full h-full inset-0 z-40 bg-black/50" aria-hidden="true" />
           <ServiceDetailsModal 
+            handleDelete={handleDelete}
             closeDetails={closeDetails} 
             servicedetails={servicesDetails}
           />
@@ -236,7 +237,6 @@ export default function Painel() {
             <div className="flex justify-between">
               <h3 className="text-[1rem] font-semibold">{s.nome}</h3>
               <div className="flex gap-4">
-                <Pencil height={20} className="hover:stroke-blue-500 cursor-pointer" />
                 <Trash2 onClick={() => handleDelete(s.id)} height={20} className="hover:stroke-red-500 cursor-pointer" />
               </div>
             </div>
