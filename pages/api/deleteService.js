@@ -8,9 +8,8 @@ export default async function handle(req, res) {
 
     try {
         const { id } = req.body;
-        const [deleteImage] = await pool.query('DELETE FROM servicos_images WHERE servicos_images.servicos_id = ?',[id])
-        const [result] = await pool.query('DELETE FROM servicos WHERE id = ?', [id])
-        res.status(200).json({ message: 'delete feito com sucesso' })
+        const [result] = await pool.query('UPDATE servicos SET ativo = 0 WHERE id = ?', [id])
+        res.status(200).json({ message: 'serviço desativado com sucesso' })
     
     } catch (error) {
         console.log(error);

@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   const { nome, descricao, valor, url } = req.body;
   try {
     const [result] = await pool.query(
-      "INSERT INTO servicos (nome, descricao, valor) VALUES(?, ?, ?)",
-      [nome, descricao, valor],
+      "INSERT INTO servicos (nome, descricao, valor, ativo) VALUES(?, ?, ?, ?)",
+      [nome, descricao, valor, 1],
     );
 
     //url for um array, a constate recebe este array inteiro, caso contrario se não um array ele basicamente tem um valor só, por isso do [url], aí caso contrario nenhuma dessas condições sejam verdadeiras a constante fica vazia
