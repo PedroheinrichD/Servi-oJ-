@@ -1,18 +1,217 @@
-"use client";
+// ElixirLanding.tsx
+import Link from 'next/link';
+import React from 'react';
 
-import Link from "next/link";
+// ─── Icons (inline SVGs) ─────────────────────────────────────────
+const MenuIcon = ({ className }: { className?: string }) => (
+  <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="15" y2="18" />
+  </svg>
+);
 
-export default function Home() {
+const LeafIcon = ({ className }: { className?: string }) => (
+  <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.6C13.4 5.4 17.8 7.2 19 10.8c.4 1.2.4 2.6 0 3.8" />
+    <path d="M11 20c-1.5-1.5-2-3.5-1.5-5.5" />
+    <path d="M20 20c-2.5 0-4.5-1.5-5.5-3.5" />
+  </svg>
+);
+
+const MassageIcon = ({ className }: { className?: string }) => (
+  <svg className={className} width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10" />
+    <path d="M12 12c-2 0-3.5 1.5-3.5 3.5S10 19 12 19s3.5-1.5 3.5-3.5" />
+    <path d="M12 12V2" />
+    <path d="M15.5 8.5L12 12l-3.5-3.5" />
+  </svg>
+);
+
+const AcupunctureIcon = ({ className }: { className?: string }) => (
+  <svg className={className} width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+  </svg>
+);
+
+const HolisticIcon = ({ className }: { className?: string }) => (
+  <svg className={className} width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 0v20" />
+    <path d="M2 12h20" />
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2c2.5 4 2.5 16 0 20" />
+    <path d="M12 2c-2.5 4-2.5 16 0 20" />
+  </svg>
+);
+
+// ─── Types ───────────────────────────────────────────────────────
+interface ServiceCardProps {
+  icon: React.ReactNode;
+  duration: string;
+  title: string;
+  description: string;
+  price: string;
+}
+
+// ─── Sub-components ──────────────────────────────────────────────
+const ServiceCard: React.FC<ServiceCardProps> = ({ icon, duration, title, description, price }) => (
+  <div className="bg-surface-container p-6">
+    <div className="flex items-start justify-between mb-4">
+      <div className="text-on-surface">{icon}</div>
+      <span className="font-label text-secondary text-[11px]">
+        {duration}
+      </span>
+    </div>
+
+    <h3 className="font-serif text-[22px] text-on-surface mb-3 leading-[1.2]">
+      {title}
+    </h3>
+
+    <p className="font-body text-[14px] leading-[1.6] text-on-surface-variant mb-6">
+      {description}
+    </p>
+
+    <div className="flex items-center justify-between mb-5">
+      <span className="font-label text-outline text-[12px]">
+        A partir de
+      </span>
+      <span className="font-body font-semibold text-[16px] text-on-surface">
+        {price}
+      </span>
+    </div>
+
+    <button className="w-full py-3.5 border border-on-surface font-button text-[11px] text-on-surface bg-transparent hover:bg-on-surface hover:text-surface transition-colors duration-300">
+      Agendar este serviço
+    </button>
+  </div>
+);
+
+// ─── Main Component ──────────────────────────────────────────────
+const ElixirLanding: React.FC = () => {
+  const services: ServiceCardProps[] = [
+    {
+      icon: <MassageIcon />,
+      duration: '60 min',
+      title: 'Massagem Terapêutica',
+      description:
+        'Liberação de tensões musculares profundas utilizando técnicas exclusivas para restaurar a mobilidade e promover relaxamento intenso.',
+      price: 'R$ 180',
+    },
+    {
+      icon: <AcupunctureIcon />,
+      duration: '45 min',
+      title: 'Acupuntura Estética',
+      description:
+        'Estímulo natural da produção de colágeno e harmonização da energia vital (Qi) para um rejuvenescimento facial visível e duradouro.',
+      price: 'R$ 220',
+    },
+    {
+      icon: <HolisticIcon />,
+      duration: '90 min',
+      title: 'Terapia Holística Integrada',
+      description:
+        'Sessão completa combinando aromaterapia, cristais e alinhamento energético para restaurar o equilíbrio emocional e físico.',
+      price: 'R$ 350',
+    },
+  ];
+
   return (
-    <div className="flex gap-8">
-      <Link href="/agendamento">agendar</Link>
+    <div className="min-h-screen bg-surface text-on-surface font-body">
+      {/* ─── Header ─────────────────────────────────────────────── */}
+      <header className="flex items-center justify-between px-5 py-4 bg-surface">
+        <button className="text-on-surface p-1">
+          <MenuIcon />
+        </button>
 
-      <Link href="/admin">admin</Link>
+        <h1 className="font-serif text-[18px] tracking-[0.15em] uppercase text-on-surface">
+          Caroline
+        </h1>
 
-      <Link href="/painel">painel</Link>
+        <Link className="font-label text-[11px] text-on-surface" href={'/admin'}>
+          Admin
+        </Link>
+      </header>
+
+      {/* ─── Hero Image ─────────────────────────────────────────── */}
+      <section className="px-5 pt-2 pb-8">
+        <div className="w-full aspect-[3/4] bg-surface-container-high overflow-hidden">
+          <img
+            src="/elixir-hero.jpg"
+            alt="caroline_image"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* ─── Profile ────────────────────────────────────────────── */}
+      <section className="px-5 pb-10">
+        <span className="block font-label text-secondary mb-3">
+          Especialista em Beleza e Cuidados
+        </span>
+
+        <h2 className="font-serif text-[36px] text-on-surface leading-[1.1] mb-5">
+         Caroline
+          <br />
+          Beleza & Estética
+        </h2>
+
+        <p className="font-body text-[15px] leading-[1.7] text-on-surface-variant mb-6">
+          Com experiência em cuidados com unhas, cabelos e depilação, ofereço um atendimento personalizado para valorizar sua beleza e proporcionar mais confiança e bem-estar. Cada serviço é realizado com atenção aos detalhes, buscando entregar um resultado bonito, cuidadoso e de qualidade.
+        </p>
+
+      </section>
+
+      {/* ─── Divider ────────────────────────────────────────────── */}
+      <div className="px-5">
+        <div className="w-full h-px bg-[#d9cdb8]" />
+      </div>
+
+      {/* ─── CTA Section ────────────────────────────────────────── */}
+      <section className="px-5 py-12 text-center">
+        <h2 className="font-serif text-[28px] text-on-surface leading-[1.2] mb-4">
+          Agende seu momento de
+          <br />
+          cuidado
+        </h2>
+
+        <p className="font-body text-[14px] leading-[1.7] text-on-surface-variant mb-8 max-w-[280px] mx-auto">
+          Agende seu horário e cuide de você.
+        </p>
+
+        <button className="w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
+          Agendar Agora
+        </button>
+      </section>
+
+      {/* ─── Services ───────────────────────────────────────────── */}
+      <section className="px-5 pb-16">
+        <h2 className="font-serif text-[28px] text-on-surface text-center mb-10 leading-[1.2]">
+          Nossos Serviços
+        </h2>
+
+        <div className="flex flex-col gap-6">
+          {services.map((service, index) => (
+            <ServiceCard key={index} {...service} />
+          ))}
+        </div>
+      </section>
+
+      {/* ─── Footer ─────────────────────────────────────────────── */}
+      <footer className="bg-surface-container px-5 py-12 text-center">
+        <h3 className="font-serif text-[20px] tracking-[0.12em] uppercase text-on-surface mb-6">
+          Caroline
+        </h3>
+      
+        <p className="font-label text-[11px] text-outline">
+          © 2026 todos os direitos reservados.
+        </p>
+      </footer>
     </div>
   );
-}
+};
+
+export default ElixirLanding;
 
 /*
 

@@ -4,6 +4,53 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #fbf9f4;
+  --surface-dim: #dbdad5;
+  --surface-bright: #fbf9f4;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f5f3ee;
+  --surface-container: #f0eee9;
+  --surface-container-high: #eae8e3;
+  --surface-container-highest: #e4e2dd;
+  --on-surface: #1b1c19;
+  --on-surface-variant: #434844;
+  --inverse-surface: #30312e;
+  --inverse-on-surface: #f2f1ec;
+  --outline: #737874;
+  --outline-variant: #c3c8c3;
+  --surface-tint: #55615a;
+  --primary: #101a15;
+  --on-primary: #ffffff;
+  --primary-container: #242f29;
+  --on-primary-container: #8b978f;
+  --inverse-primary: #bdcac1;
+  --secondary: #735a3a;
+  --on-secondary: #ffffff;
+  --secondary-container: #fddab2;
+  --on-secondary-container: #785e3e;
+  --tertiary: #1d170a;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #322c1d;
+  --on-tertiary-container: #9d9380;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --primary-fixed: #d9e6dc;
+  --primary-fixed-dim: #bdcac1;
+  --on-primary-fixed: #131e18;
+  --on-primary-fixed-variant: #3e4943;
+  --secondary-fixed: #ffddb6;
+  --secondary-fixed-dim: #e2c19b;
+  --on-secondary-fixed: #291801;
+  --on-secondary-fixed-variant: #594325;
+  --tertiary-fixed: #eee1cb;
+  --tertiary-fixed-dim: #d1c5b0;
+  --on-tertiary-fixed: #211b0e;
+  --on-tertiary-fixed-variant: #4e4636;
+  --background: #fbf9f4;
+  --on-background: #1b1c19;
+  --surface-variant: #e4e2dd;
 }
 
 @theme inline {
@@ -12,7 +59,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
-@theme{
+
+@theme {
   --color-bgAll: #FBF9F4;
   --color-bgMilitar: #242F29;
   --color-textLabel: #434844;
@@ -28,9 +76,92 @@
   }
 }
 
+@layer components {
+  /* ─── Font families ─── */
+  .font-serif {
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .font-body {
+    font-family: 'Manrope', sans-serif;
+  }
+
+  /* ─── Label: small caps, bold, wide tracking ─── */
+  .font-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Button: caps, semi-bold, slight tracking ─── */
+  .font-button {
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Color utilities mapped to CSS vars ─── */
+  .bg-surface {
+    background-color: var(--surface);
+  }
+  .bg-surface-container {
+    background-color: var(--surface-container);
+  }
+  .bg-surface-container-high {
+    background-color: var(--surface-container-high);
+  }
+  .bg-primary-container {
+    background-color: var(--primary-container);
+  }
+  .text-on-surface {
+    color: var(--on-surface);
+  }
+  .text-on-surface-variant {
+    color: var(--on-surface-variant);
+  }
+  .text-on-primary {
+    color: var(--on-primary);
+  }
+  .text-secondary {
+    color: var(--secondary);
+  }
+  .text-outline {
+    color: var(--outline);
+  }
+  .border-on-surface {
+    border-color: var(--on-surface);
+  }
+  .border-outline-variant {
+    border-color: var(--outline-variant);
+  }
+  .hover\:bg-on-surface:hover {
+    background-color: var(--on-surface);
+  }
+  .hover\:bg-primary:hover {
+    background-color: var(--primary);
+  }
+  .hover\:text-surface:hover {
+    color: var(--surface);
+  }
+  .hover\:text-on-surface:hover {
+    color: var(--on-surface);
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: 'Manrope', sans-serif;
+  background-color: var(--surface);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   /* font-family: var(--font-inter); */
 }
 
@@ -38,10 +169,8 @@ body {
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.errorMessage{
+.errorMessage {
   font-size: 12px;
   margin: 4px 0px 0px 4px;
   color: #f52e0b;
 }
-
-
