@@ -2,7 +2,7 @@ import pool from "../../lib/db";
 
 export default async function handler(req, res) {
   try {
-    const [rows] = await pool.query('SELECT servicos.id, servicos.nome, servicos.descricao, servicos.valor, COUNT(servicos_images.id) AS quantidade_imagens FROM servicos LEFT JOIN servicos_images ON servicos.id = servicos_images.servicos_id GROUP BY servicos.id, servicos.nome, servicos.valor');
+    const [rows] = await pool.query('SELECT servicos.id, servicos.nome, servicos.descricao, servicos.valor, COUNT(servicos_images.id) AS quantidade_imagens, GROUP_CONCAT(servicos_images.url) AS lista_url FROM servicos LEFT JOIN servicos_images ON servicos.id = servicos_images.servicos_id GROUP BY servicos.id, servicos.nome, servicos.valor');
     res.status(200).json(rows)
   } catch (error) {
     console.log(error);

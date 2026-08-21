@@ -3,5 +3,6 @@ export type serviceType = {
     nome: string,
     descricao: string,
     valor: number,
-    quantidade_imagens: number
+    quantidade_imagens: number,
+    lista_url: string[]
 }

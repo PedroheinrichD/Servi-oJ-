@@ -2,13 +2,14 @@
 import { Button } from "@/components/button";
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Check, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, Pencil, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { addService } from "./addService";
 import { cleanFields } from "./cleanFields";
 import { fileInput } from "./fileInput";
 import { deleteService } from "./deleteService";
+import ServiceDetailsModal from "./ServiceDetailsModal";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null) // referencia para o input to tipo file
@@ -23,7 +24,11 @@ export default function Painel() {
   const [message, setMessage] = useState('') // mensagem para o usuario
 
   const [services, setServices] = useState<serviceType[]>([])// guarda todos os servico
+  const [servicesDetails, setServicedetails] = useState<serviceType[]>([])
+
   const [successful, setSuccessful] = useState(false)
+  const [isModal, setIsModal] = useState(false)
+
 
   async function handleDelete(id: number) {
     await deleteService({ id })
@@ -31,16 +36,27 @@ export default function Painel() {
       currentServices.filter(item => item.id !== id)
     )
   }
-
+  
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     fileInput({ event, setNomeArquivo, setImages });
   }
-
+  
   // função que chama as funções handleAddService e cleanFields 
   function addServiceButton() {
     addService({ nome, descricao, valor, setMessage, setSuccessful, images })
   }
 
+  function closeDetails(){
+    setIsModal(false)
+  }
+
+  
+  // quando o admin clicar em detalhes, abre modal com os detalhes daquele servico 
+  function openDetails(id: number) {
+    setIsModal(true)
+    const Resultfilter = services.filter((item) => item.id === id)
+    setServicedetails(Resultfilter)
+  }
   // monitora a variavel successful, se for true, chama a função cleanFields para limpar os campos
   useEffect(() => {
     if (successful) {
@@ -81,6 +97,16 @@ export default function Painel() {
             <Check width={30} height={30} className="stroke-green-500" />
             <p className="text-md font-semibold">Serviço adicionado com sucesso</p>
           </div>
+        </>
+      }
+
+      {isModal &&
+        <>
+          <div className="fixed w-full h-full inset-0 z-40 bg-black/50" aria-hidden="true" />
+          <ServiceDetailsModal 
+            closeDetails={closeDetails} 
+            servicedetails={servicesDetails}
+          />
         </>
       }
 
@@ -227,7 +253,7 @@ export default function Painel() {
                   : `${s.quantidade_imagens} imagens`}
               </span>
             </div>
-            <span className="border-b">detalhes</span>
+            <span onClick={() => openDetails(s.id)} className="border-b cursor-pointer">detalhes</span>
           </div>
         ))}
       </section>
