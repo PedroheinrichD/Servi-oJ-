@@ -1,21 +1,17 @@
-  
-  type handleFileInputProps = {
+type handleFileInputProps = {
     event: React.ChangeEvent<HTMLInputElement>,
     setNomeArquivo: (nomeArquivo: string[]) => void,
     setImages: (images: string[]) => void
   }
 
-  
-  // req para enviar as fotos e devolver o link delas
   export async function fileInput({ event, setNomeArquivo, setImages }: handleFileInputProps) {
-    const urls: string[] = [] // é do tipo array de string e começa vazio
-    const nomes: string[] = [] // é do tipo array de string e começa vazio
+    const urls: string[] = []
+    const nomes: string[] = []
     const files = event.target.files
 
     if (!files) return
 
-    for (const file of Array.from(files)) { // loop percorre a minha lista files e a cada iteração vai adicionando ao array de string urls que depois adiciona ao state
-      // mandar um formulario de dados
+    for (const file of Array.from(files)) {
       const data = new FormData();
 
       data.append("file", file)

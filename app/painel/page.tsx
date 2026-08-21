@@ -5,10 +5,10 @@ import { api } from "@/utils/api";
 import { ArrowLeft, Check, Pencil, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { addService } from "./addService";
-import { cleanFields } from "./cleanFields";
-import { fileInput } from "./fileInput";
-import { deleteService } from "./deleteService";
+import { addService } from "./functions/addService";
+import { cleanFields } from "./functions/cleanFields";
+import { fileInput } from "./functions/fileInput";
+import { deleteService } from "./functions/deleteService";
 import ServiceDetailsModal from "./ServiceDetailsModal";
 
 export default function Painel() {

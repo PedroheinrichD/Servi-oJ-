@@ -6,7 +6,7 @@ type deleteProps = {
 
 export async function deleteService({ id }: deleteProps){
     try {
-        const req = await api.delete('/api/deleteService', {
+        await api.delete('/api/deleteService', {
             data: { id }
         })
     } catch (error) {

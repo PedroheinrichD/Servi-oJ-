@@ -13,9 +13,3 @@ export function cleanFields({ setNome, setDescricao, setValor, setImages, setNom
     setImages([]);
     setNomeArquivo([]);
 }
-
-
-    
-    
-    
-    
