@@ -37,8 +37,8 @@ export default function Painel() {
   }
 
   // função que chama as funções handleAddService e cleanFields 
-  function handleButton() {
-    addService({ nome, descricao, valor, setMessage, setSuccessful })
+  function addServiceButton() {
+    addService({ nome, descricao, valor, setMessage, setSuccessful, images })
   }
 
   // monitora a variavel successful, se for true, chama a função cleanFields para limpar os campos
@@ -201,7 +201,7 @@ export default function Painel() {
           </div>
         </div>
 
-        <Button onclick={handleButton} name="Adicionar Serviço" />
+        <Button onclick={addServiceButton} name="Adicionar Serviço" />
       </section>
 
       <section className="flex flex-col gap-8">

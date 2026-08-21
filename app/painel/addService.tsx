@@ -6,11 +6,12 @@ type serviceProps = {
     descricao: string,
     valor: string,
     setMessage: (message: string) => void,
-    setSuccessful: (successful: boolean) => void
+    setSuccessful: (successful: boolean) => void,
+    images?: string[]
 }
 
 // req para enviar dados dos servicos
-export async function addService({ nome, descricao, valor, setMessage, setSuccessful }: serviceProps) {
+export async function addService({ nome, descricao, valor, setMessage, setSuccessful, images }: serviceProps) {
     if (nome === '' || descricao === '' || valor === '') {
         setMessage('Campo vazio! Por favor preencha')
         return
@@ -23,6 +24,7 @@ export async function addService({ nome, descricao, valor, setMessage, setSucces
             nome: nome,
             descricao: descricao,
             valor: valueAsNumber,
+            url: images
         })
 
         setSuccessful(true)
