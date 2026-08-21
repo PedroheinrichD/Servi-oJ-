@@ -5,7 +5,6 @@ import { User, Phone, MapPin, CalendarDays, Clock3, Sparkles, ChevronDown, Check
 import { api } from '@/utils/api';
 import { serviceGetType } from '@/types/serviceGetType';
 
-// Preencher horários conforme a agenda real do estabelecimento
 const HORARIOS = ['08:00', '09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
 
 function formatarTelefone(valor: string): string {
@@ -31,7 +30,7 @@ type CampoProps = {
 
 function Campo({ icon: Icon, label, required, error, children }: CampoProps) {
     return (
-        <div>
+        <div className="af-field-group">
             <label className="af-label">
                 <Icon size={14} strokeWidth={2} className="af-label-icon" />
                 {label}
@@ -49,7 +48,7 @@ export default function Agendamento() {
     const [endereco, setEndereco] = useState('');
     const [data, setData] = useState('');
     const [horario, setHorario] = useState('');
-    const [servicoValueId, setServicoValueId] = useState(''); // valor do select
+    const [servicoValueId, setServicoValueId] = useState('');
     const [SERVICOS, setSERVICOS] = useState<serviceGetType[]>([]);
     const [tentouEnviar, setTentouEnviar] = useState(false);
     const [confirmado, setConfirmado] = useState(false);
@@ -80,18 +79,17 @@ export default function Agendamento() {
             return
         }
         try {
-            const resultado = SERVICOS.find((item) => item.id === Number(servicoValueId));  // pegar o valor na epoca do agendamento
+            const resultado = SERVICOS.find((item) => item.id === Number(servicoValueId));
             const res = await api.post('/api/agendamento', {
                 nome: nome,
                 telefone: telefone,
                 endereco: endereco,
                 servico_id: servicoValueId,
-                data: data,              // formato: "2026-08-15"
-                hora: horario,              // formato: "10:00"
+                data: data,
+                hora: horario,
                 valor_na_epoca: resultado?.valor
             });
 
-            // temporizador para esconder notificação            
             setTimeout(() => {
                 handleNovoAgendamento();
             }, 4000);
@@ -100,14 +98,13 @@ export default function Agendamento() {
         }
     }
 
-    // requisição para obter as horas já cadastradas
     useEffect(() => {
         async function GetHorario() {
             if (!data) return
             try {
-                const res = await api.get(`/api/horario_disponivel?data=${data}`); // res.data vem assim: [{hora:"08:00:00"}, {hora:"10:00:00"}]
-                const horariosAgendados = res.data.map((item: any) => item.hora.slice(0, 5)); // transforma em ["08:00", "10:00"]
-                const disponiveis = HORARIOS.filter(item => !horariosAgendados.includes(item))  // compara com a lista fixa
+                const res = await api.get(`/api/horario_disponivel?data=${data}`);
+                const horariosAgendados = res.data.map((item: any) => item.hora.slice(0, 5));
+                const disponiveis = HORARIOS.filter(item => !horariosAgendados.includes(item))
                 setHorariosDisponiveis(disponiveis)
             } catch (error) {
                 console.log('erro de horario' + error);
@@ -116,8 +113,6 @@ export default function Agendamento() {
         GetHorario()
     }, [data])
 
-
-    // req para obter os serviços
     useEffect(() => {
         async function solicitaServico() {
             try {
@@ -131,9 +126,6 @@ export default function Agendamento() {
         solicitaServico()
     }, [])
 
-
-
-    // pegando o dia atual
     const hoje = new Date();
     const ano = hoje.getFullYear();
     const mes = String(hoje.getMonth() + 1).padStart(2, '0')
@@ -143,175 +135,352 @@ export default function Agendamento() {
     return (
         <div className="af-page">
             <style>{`
-        .af-page {
-          min-height: 100vh;
-          width: 100%;
-          background-color: #FBF9F4;
-          background-image: radial-gradient(circle at 1px 1px, rgba(32,42,34,0.07) 1px, transparent 0);
-          background-size: 22px 22px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 3rem 1.25rem;
-        }
-        .af-card {
-          width: 100%;
-          max-width: 560px;
-          border-radius: 4px;
-          padding: 3rem 2.75rem;
-        }
-        @media (max-width: 480px) {
-          .af-card { padding: 2.25rem 1.5rem; }
-        }
-        .af-eyebrow {
-          font-size: 0.7rem;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: #AD8A4E;
-          font-weight: 600;
-          margin-bottom: 0.6rem;
-        }
-        .af-title {
-          font-weight: 600;
-          font-size: 2.15rem;
-          color: #202A22;
-          line-height: 1.05;
-          margin-bottom: 0.5rem;
-        }
-        .af-subtitle {
-          color: #6B7566;
-          font-size: 0.9rem;
-          margin-bottom: 2rem;
-          max-width: 42ch;
-        }
-        .af-section-title {
-          font-size: 0.72rem;
-          font-weight: 600;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: #202A22;
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          margin: 2rem 0 1.25rem;
-        }
-        .af-section-title::after {
-          content: '';
-          flex: 1;
-          height: 1px;
-          background-color: #D8D2C0;
-        }
-        .af-section-title:first-of-type { margin-top: 0; }
-        .af-label {
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
-          font-size: 0.7rem;
-          font-weight: 600;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: #5B6B57;
-          margin-bottom: 0.55rem;
-        }
-        .af-label-icon { color: #AD8A4E; flex-shrink: 0; }
-        .af-required { color: #B14B3A; }
-        .af-input, .af-select {
-          width: 100%;
-          background: transparent;
-          border: none;
-          border-bottom: 2px solid #D8D2C0;
-          padding: 0.5rem 0.1rem 0.6rem;
-          font-size: 0.98rem;
-          color: #202A22;
-          outline: none;
-          transition: border-color 0.2s ease;
-          appearance: none;
-          border-radius: 0;
-        }
-        .af-input::placeholder { color: #A9A390; }
-        .af-input:focus, .af-select:focus { border-color: #AD8A4E; }
-        .af-input.af-invalid, .af-select.af-invalid { border-color: #B14B3A; }
-        .af-error { margin-top: 0.4rem; font-size: 0.72rem; color: #B14B3A; }
-        .af-select-wrap { position: relative; }
-        .af-select-chevron {
-          position: absolute;
-          right: 0.15rem;
-          top: 50%;
-          transform: translateY(-70%);
-          pointer-events: none;
-          color: #AD8A4E;
-        }
-        .af-grid { display: grid; grid-template-columns: 1fr; gap: 1.6rem; }
-        @media (min-width: 480px) {
-          .af-grid-2 { grid-template-columns: 1fr 1fr; }
-        }
-        .af-submit {
-          margin-top: 2.4rem;
-          width: 100%;
-          background-color: #202A22;
-          color: #F1EEE3;
-          border: none;
-          padding: 0.9rem 1.5rem;
-          font-weight: 600;
-          font-size: 0.85rem;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          border-radius: 2px;
-          cursor: pointer;
-          transition: background-color 0.2s ease;
-        }
-        .af-submit:hover { background-color: #33402F; }
-        .af-submit:focus-visible { outline: 2px solid #AD8A4E; outline-offset: 3px; }
-        .af-banner {
-          margin-bottom: 1.75rem;
-          padding: 0.85rem 1rem;
-          background-color: rgba(173,138,78,0.12);
-          border-left: 3px solid #AD8A4E;
-          font-size: 0.82rem;
-          color: #59502F;
-          display: flex;
-          align-items: center;
-          gap: 0.65rem;
-        }
-        .af-banner-icon {
-          flex-shrink: 0;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background-color: #AD8A4E;
-          color: #FAF8F2;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .af-banner-actions { margin-left: auto; }
-        .af-banner button {
-          background: none;
-          border: none;
-          color: #AD8A4E;
-          font-weight: 600;
-          font-size: 0.72rem;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .af-submit, .af-input, .af-select { transition: none; }
-        }
-      `}</style>
+                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&display=swap');
 
+                .af-page {
+                    min-height: 100vh;
+                    width: 100%;
+                    background-color: #F7F5F0;
+                    background-image: 
+                        radial-gradient(at 0% 0%, rgba(201, 168, 124, 0.08) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(201, 168, 124, 0.06) 0px, transparent 50%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 3rem 1.25rem;
+                    font-family: 'Inter', system-ui, sans-serif;
+                }
 
+                .af-card {
+                    width: 100%;
+                    max-width: 640px;
+                    background: #FFFFFF;
+                    border-radius: 24px;
+                    padding: 3.5rem 3rem;
+                    box-shadow: 
+                        0 1px 2px rgba(0,0,0,0.02),
+                        0 4px 8px rgba(0,0,0,0.02),
+                        0 8px 16px rgba(0,0,0,0.02),
+                        0 16px 32px rgba(0,0,0,0.03);
+                    position: relative;
+                    overflow: hidden;
+                }
 
+                .af-card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 4px;
+                    background: linear-gradient(90deg, #C9A87C 0%, #D4B896 50%, #C9A87C 100%);
+                }
+
+                @media (max-width: 640px) {
+                    .af-card { 
+                        padding: 2.5rem 1.75rem; 
+                        border-radius: 20px;
+                    }
+                    .af-page { padding: 1.5rem 1rem; }
+                }
+
+                .af-eyebrow {
+                    font-size: 0.7rem;
+                    letter-spacing: 0.25em;
+                    text-transform: uppercase;
+                    color: #C9A87C;
+                    font-weight: 600;
+                    margin-bottom: 0.75rem;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .af-title {
+                    font-family: 'Playfair Display', Georgia, serif;
+                    font-weight: 600;
+                    font-size: 2.5rem;
+                    color: #1C1917;
+                    line-height: 1.1;
+                    margin-bottom: 0.6rem;
+                    letter-spacing: -0.02em;
+                }
+
+                .af-subtitle {
+                    color: #78716C;
+                    font-size: 0.95rem;
+                    line-height: 1.6;
+                    margin-bottom: 2.5rem;
+                    max-width: 45ch;
+                    font-weight: 400;
+                }
+
+                .af-section-title {
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    letter-spacing: 0.18em;
+                    text-transform: uppercase;
+                    color: #1C1917;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    margin: 2.5rem 0 1.5rem;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .af-section-title::after {
+                    content: '';
+                    flex: 1;
+                    height: 1px;
+                    background: linear-gradient(90deg, #E7E5E4 0%, transparent 100%);
+                }
+
+                .af-section-title:first-of-type { margin-top: 0; }
+
+                .af-field-group { margin-bottom: 0.25rem; }
+
+                .af-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.45rem;
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    letter-spacing: 0.1em;
+                    text-transform: uppercase;
+                    color: #78716C;
+                    margin-bottom: 0.65rem;
+                    font-family: 'Inter', sans-serif;
+                }
+
+                .af-label-icon { 
+                    color: #C9A87C; 
+                    flex-shrink: 0;
+                    opacity: 0.9;
+                }
+
+                .af-required { color: #DC2626; font-weight: 700; }
+
+                .af-input, .af-select {
+                    width: 100%;
+                    background: #FAFAF9;
+                    border: 1.5px solid #E7E5E4;
+                    border-radius: 12px;
+                    padding: 0.85rem 1rem;
+                    font-size: 0.95rem;
+                    color: #1C1917;
+                    outline: none;
+                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 400;
+                }
+
+                .af-input::placeholder { color: #A8A29E; font-weight: 300; }
+
+                .af-input:hover, .af-select:hover {
+                    border-color: #D6D3D1;
+                    background: #F5F5F4;
+                }
+
+                .af-input:focus, .af-select:focus {
+                    border-color: #C9A87C;
+                    background: #FFFFFF;
+                    box-shadow: 0 0 0 4px rgba(201, 168, 124, 0.12);
+                }
+
+                .af-input.af-invalid, .af-select.af-invalid {
+                    border-color: #DC2626;
+                    background: #FEF2F2;
+                }
+
+                .af-input.af-invalid:focus, .af-select.af-invalid:focus {
+                    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+                }
+
+                .af-error { 
+                    margin-top: 0.5rem; 
+                    font-size: 0.75rem; 
+                    color: #DC2626;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.35rem;
+                    animation: af-slideIn 0.3s ease;
+                }
+
+                .af-error::before {
+                    content: '';
+                    width: 4px;
+                    height: 4px;
+                    border-radius: 50%;
+                    background: #DC2626;
+                    display: inline-block;
+                }
+
+                .af-select-wrap { position: relative; }
+
+                .af-select {
+                    cursor: pointer;
+                    appearance: none;
+                    padding-right: 2.5rem;
+                }
+
+                .af-select-chevron {
+                    position: absolute;
+                    right: 1rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    pointer-events: none;
+                    color: #C9A87C;
+                    transition: transform 0.2s ease;
+                }
+
+                .af-select-wrap:focus-within .af-select-chevron {
+                    transform: translateY(-50%) rotate(180deg);
+                }
+
+                .af-grid { 
+                    display: grid; 
+                    grid-template-columns: 1fr; 
+                    gap: 1.25rem; 
+                }
+
+                @media (min-width: 560px) {
+                    .af-grid-2 { grid-template-columns: 1fr 1fr; }
+                }
+
+                .af-submit {
+                    margin-top: 2.5rem;
+                    width: 100%;
+                    background: linear-gradient(135deg, #1C1917 0%, #292524 100%);
+                    color: #FAFAF9;
+                    border: none;
+                    padding: 1rem 1.5rem;
+                    font-weight: 600;
+                    font-size: 0.85rem;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    border-radius: 14px;
+                    cursor: pointer;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    font-family: 'Inter', sans-serif;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .af-submit::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+                    transition: left 0.5s ease;
+                }
+
+                .af-submit:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 8px 24px rgba(28, 25, 23, 0.18);
+                }
+
+                .af-submit:hover::after {
+                    left: 100%;
+                }
+
+                .af-submit:active {
+                    transform: translateY(0);
+                }
+
+                .af-submit:focus-visible { 
+                    outline: 2px solid #C9A87C; 
+                    outline-offset: 3px; 
+                }
+
+                .af-banner {
+                    margin-bottom: 2rem;
+                    padding: 1rem 1.25rem;
+                    background: linear-gradient(135deg, rgba(201, 168, 124, 0.1) 0%, rgba(201, 168, 124, 0.05) 100%);
+                    border: 1px solid rgba(201, 168, 124, 0.2);
+                    border-radius: 14px;
+                    font-size: 0.9rem;
+                    color: #78716C;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    animation: af-slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .af-banner-icon {
+                    flex-shrink: 0;
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #C9A87C 0%, #D4B896 100%);
+                    color: #FFFFFF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 8px rgba(201, 168, 124, 0.3);
+                }
+
+                .af-banner-actions { margin-left: auto; }
+
+                .af-banner button {
+                    background: none;
+                    border: none;
+                    color: #C9A87C;
+                    font-weight: 600;
+                    font-size: 0.72rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.08em;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    padding: 0.35rem 0.75rem;
+                    border-radius: 8px;
+                    transition: all 0.2s ease;
+                }
+
+                .af-banner button:hover {
+                    background: rgba(201, 168, 124, 0.1);
+                    color: #1C1917;
+                }
+
+                @keyframes af-slideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-6px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .af-submit, .af-input, .af-select, .af-banner, .af-error { 
+                        transition: none; 
+                        animation: none;
+                    }
+                }
+
+                /* Estilização nativa do input date */
+                input[type="date"].af-input::-webkit-calendar-picker-indicator {
+                    opacity: 0.5;
+                    cursor: pointer;
+                    transition: opacity 0.2s;
+                }
+
+                input[type="date"].af-input::-webkit-calendar-picker-indicator:hover {
+                    opacity: 1;
+                }
+            `}</style>
 
             <div className="af-card">
                 <div className="af-eyebrow">Ficha de agendamento</div>
-                <h1 className="af-title tracking-[0.05em]">Agendamento</h1>
+                <h1 className="af-title">Agendamento</h1>
                 <p className="af-subtitle">Preencha os dados abaixo para reservar seu horário. Os campos marcados com * são obrigatórios.</p>
 
                 {confirmado && (
                     <div className="af-banner">
-                        <span className="af-banner-icon"><Check size={12} strokeWidth={3} /></span>
+                        <span className="af-banner-icon"><Check size={14} strokeWidth={3} /></span>
                         <span>Agendamento confirmado.</span>
                         <span className="af-banner-actions">
                             <button type="button" onClick={handleNovoAgendamento}>Novo agendamento</button>
