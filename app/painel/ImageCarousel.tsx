@@ -4,12 +4,14 @@ type ImageCarouselProps = {
   images: string[];
   alt?: string;
   intervalMs?: number; // tempo entre cada troca automática
+  heightClassName?: string;
 };
 
 export default function ImageCarousel({
   images,
   alt = "",
-  intervalMs = 3000,
+  intervalMs = 4000,
+  heightClassName = "h-44",
 }: ImageCarouselProps) {
   const [current, setCurrent] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -30,7 +32,7 @@ export default function ImageCarousel({
   if (images.length === 0) return null;
 
   return (
-    <div className="relative h-44 w-full overflow-hidden">
+    <div className={`relative ${heightClassName} w-full overflow-hidden`}>
       {/* trilho que desliza */}
       <div
         className="flex h-full transition-transform duration-700 ease-in-out"
@@ -41,7 +43,7 @@ export default function ImageCarousel({
             key={i}
             src={url.trim()}
             alt={`${alt} ${i + 1}`}
-            className="h-44 w-full flex-shrink-0 object-cover"
+            className={`${heightClassName} w-full flex-shrink-0 bg-surface-container-high object-cover`}
           />
         ))}
       </div>

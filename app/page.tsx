@@ -1,7 +1,13 @@
+"use client";
+
 // ElixirLanding.tsx
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useEffect, useState } from "react";
+import ImageCarousel from "./painel/ImageCarousel";
+import { serviceType } from "@/types/serviceType";
+import { api } from "@/utils/api";
 
 // ─── Icons (inline SVGs) ─────────────────────────────────────────
 const MenuIcon = ({ className }: { className?: string }) => (
@@ -98,74 +104,95 @@ const HolisticIcon = ({ className }: { className?: string }) => (
 // ─── Types ───────────────────────────────────────────────────────
 interface ServiceCardProps {
   icon: React.ReactNode;
-  duration: string;
   title: string;
   description: string;
   price: string;
+  images?: string;
 }
 
 // ─── Sub-components ──────────────────────────────────────────────
 const ServiceCard: React.FC<ServiceCardProps> = ({
   icon,
-  duration,
   title,
   description,
   price,
-}) => (
-  <div className="bg-surface-container p-6">
-    <div className="flex items-start justify-between mb-4">
-      <div className="text-on-surface">{icon}</div>
-      <span className="font-label text-secondary text-[11px]">{duration}</span>
+  images,
+}) => {
+  const imageList = images
+    ? images
+        .split(",")
+        .map((image) => image.trim())
+        .filter(Boolean)
+    : [];
+
+  return (
+    <div className="overflow-hidden bg-surface-container rounded-lg">
+      {imageList.length > 1 ? (
+        <ImageCarousel
+          images={imageList}
+          alt={title}
+          intervalMs={4000}
+          heightClassName="h-64"
+        />
+      ) : imageList.length === 1 ? (
+        <img
+          src={imageList[0]}
+          alt={title}
+          className="h-64 w-full bg-surface-container-high object-cover"
+        />
+      ) : null}
+
+      <div className="p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div className="text-on-surface">{icon}</div>
+        </div>
+
+        <h3 className="font-serif text-[22px] text-on-surface mb-3 leading-[1.2]">
+          {title}
+        </h3>
+
+        <p className="font-body text-[14px] leading-[1.6] text-on-surface-variant mb-6">
+          {description}
+        </p>
+
+        <div className="flex items-center justify-between mb-5">
+          <span className="font-label text-outline text-[12px]">
+            A partir de
+          </span>
+          <span className="font-body font-semibold text-[16px] text-on-surface">
+            {price}
+          </span>
+        </div>
+
+        <button className="w-full py-3.5 border border-on-surface font-button text-[11px] text-on-surface bg-transparent hover:bg-on-surface hover:text-surface transition-colors duration-300">
+          Agendar este serviço
+        </button>
+      </div>
     </div>
-
-    <h3 className="font-serif text-[22px] text-on-surface mb-3 leading-[1.2]">
-      {title}
-    </h3>
-
-    <p className="font-body text-[14px] leading-[1.6] text-on-surface-variant mb-6">
-      {description}
-    </p>
-
-    <div className="flex items-center justify-between mb-5">
-      <span className="font-label text-outline text-[12px]">A partir de</span>
-      <span className="font-body font-semibold text-[16px] text-on-surface">
-        {price}
-      </span>
-    </div>
-
-    <button className="w-full py-3.5 border border-on-surface font-button text-[11px] text-on-surface bg-transparent hover:bg-on-surface hover:text-surface transition-colors duration-300">
-      Agendar este serviço
-    </button>
-  </div>
-);
+  );
+};
 
 // ─── Main Component ──────────────────────────────────────────────
-const ElixirLanding: React.FC = () => {
-  const services: ServiceCardProps[] = [
-    {
-      icon: <MassageIcon />,
-      duration: "60 min",
-      title: "Massagem Terapêutica",
-      description:
-        "Liberação de tensões musculares profundas utilizando técnicas exclusivas para restaurar a mobilidade e promover relaxamento intenso.",
-      price: "R$ 180",
-    },
-    {
-      icon: <AcupunctureIcon />,
-      duration: "45 min",
-      title: "Acupuntura Estética",
-      description:
-        "Estímulo natural da produção de colágeno e harmonização da energia vital (Qi) para um rejuvenescimento facial visível e duradouro.",
-      price: "R$ 220",
-    },
-    {
-      icon: <HolisticIcon />,
-      duration: "90 min",
-      title: "Terapia Holística Integrada",
-      description:
-        "Sessão completa combinando aromaterapia, cristais e alinhamento energético para restaurar o equilíbrio emocional e físico.",
-      price: "R$ 350",
-    },
+const Page: React.FC = () => {
+  const [services, setServices] = useState<serviceType[]>([]);
+
+  useEffect(() => {
+    async function loadServices() {
+      try {
+        const response = await api.get<serviceType[]>("/api/servico");
+        setServices(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    loadServices();
+  }, []);
+
+  const serviceIcons = [
+    <MassageIcon key="massage" />,
+    <AcupunctureIcon key="acupuncture" />,
+    <HolisticIcon key="holistic" />,
   ];
 
   return (
@@ -252,7 +279,21 @@ const ElixirLanding: React.FC = () => {
 
         <div className="flex flex-col gap-6">
           {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
+            <React.Fragment key={service.id}>
+              <ServiceCard
+                icon={serviceIcons[index % serviceIcons.length]}
+                title={service.nome}
+                description={service.descricao}
+                price={`R$ ${service.valor}`}
+                images={service.lista_url}
+              />
+              {index < services.length - 1 && (
+                <div
+                  className="mx-auto h-px w-16 bg-[#d9cdb8]"
+                  aria-hidden="true"
+                />
+              )}
+            </React.Fragment>
           ))}
         </div>
       </section>
@@ -271,35 +312,4 @@ const ElixirLanding: React.FC = () => {
   );
 };
 
-export default ElixirLanding;
-
-/*
-
- req GET para exibir o serviço
-
-  const [service, setService] = useState<serviceType[]>([])
-
-  useEffect(() => {
-    async function servicoDisponivel() {
-      try {
-        const res = await api.get('/api/servico')
-        setService(res.data)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    servicoDisponivel()
-  }, [])
-
-  return (
-    <div>
-      {service.map((item) => (
-        <ul key={item.id}>
-          <li>
-            <p>{item.tempo_duracao}</p>
-          </li>
-        </ul>
-      ))}
-    </div>
-  );
-*/
+export default Page;
