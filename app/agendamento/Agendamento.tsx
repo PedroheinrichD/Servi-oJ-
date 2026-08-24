@@ -153,6 +153,18 @@ export default function Agendamento() {
         const res = await api.get("/api/servico");
         if (res === null) return;
         setSERVICOS(res.data);
+
+        const servicoId = new URLSearchParams(window.location.search).get(
+          "servicoId",
+        );
+        if (
+          servicoId &&
+          res.data.some(
+            (item: serviceGetType) => String(item.id) === servicoId,
+          )
+        ) {
+          setServicoValueId(servicoId);
+        }
       } catch (error) {
         console.log(error);
       }
