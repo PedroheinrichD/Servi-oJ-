@@ -270,9 +270,11 @@ const Page: React.FC = () => {
           Agende seu horário e cuide de você.
         </p>
 
-        <button className="w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
-          Agendar Agora
-        </button>
+        <Link href={'/agendamento'}>
+          <button className="w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
+            Agendar Agora
+          </button>
+        </Link>
       </section>
 
       {/* ─── Services ───────────────────────────────────────────── */}
