@@ -164,7 +164,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           </span>
         </div>
 
-        <button className="w-full py-3.5 border border-on-surface font-button text-[11px] text-on-surface bg-transparent hover:bg-on-surface hover:text-surface transition-colors duration-300">
+        <button className="w-full py-3.5 border border-on-surface font-button text-[11px] text-on-surface bg-transparent hover:bg-[#785e3e] hover:text-surface transition-colors duration-300">
           Agendar este serviço
         </button>
       </div>
