@@ -527,7 +527,7 @@ export default function Agendamento() {
                 }
             `}</style>
 
-      <div className="af-card">
+      <div>
         <div className="af-eyebrow">Ficha de agendamento</div>
         <h1 className="af-title">Agendamento</h1>
         <p className="af-subtitle">
