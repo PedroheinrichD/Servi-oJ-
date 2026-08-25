@@ -27,6 +27,7 @@ export default function Painel() {
 
   const [services, setServices] = useState<serviceType[]>([])
   const [servicesDetails, setServicedetails] = useState<serviceType[]>([])
+  const [editingServiceId, setEditingServiceId] = useState<number | null>(null)
 
   const [successful, setSuccessful] = useState(false)
   const [isModal, setIsModal] = useState(false)
@@ -40,15 +41,21 @@ export default function Painel() {
     )
   }
 
-  function handleEdit(id: number) {
+  function showEdit(id: number) {
     setIsModal(false)
-    const Resultfilter = services.filter((item) => item.id === id)
+    const service = services.find((item) => item.id === id)
+
+    if (!service) return
 
 
-    setNome(Resultfilter[0].nome)
-    setDescricao(Resultfilter[0].descricao)
-    setValor(Resultfilter[0].valor.toString())
-    const qtd_imagens = Resultfilter[0].quantidade_imagens
+    //exibição das propriedades aos campos para editar
+    setEditingServiceId(service.id)
+    setNome(service.nome)
+    setDescricao(service.descricao)
+    setValor(service.valor.toString())
+    setImages([])
+    setNomeArquivo([])
+    const qtd_imagens = service.quantidade_imagens
 
     setMessageImages('')
     if (qtd_imagens === 0) {
@@ -61,12 +68,49 @@ export default function Painel() {
 
   }
 
+
+
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+    setMessageImages('')
     fileInput({ event, setNomeArquivo, setImages });
   }
 
-  function addServiceButton() {
-    addService({ nome, descricao, valor, setMessage, setSuccessful, images })
+  async function handleServiceSubmit() {
+    if (editingServiceId === null) {
+      await addService({ nome, descricao, valor, setMessage, setSuccessful, images })
+      return
+    }
+
+    if (nome === '' || descricao === '' || valor === '') {
+      setMessage('Campo vazio! Por favor preencha')
+      return
+    }
+
+    try {
+      await editService({ id: editingServiceId, nome, descricao, valor, images })
+      
+      // map de atualização
+      setServices((currentServices) => currentServices.map((service) =>
+        service.id === editingServiceId
+          ? {
+            ...service,
+            nome,
+            descricao,
+            valor: Number(valor),
+            quantidade_imagens: images.length,
+            lista_url: images.join(',')
+          }
+          : service
+      ))
+      
+      setEditingServiceId(null)
+      setMessage('')
+      setSuccessful(true)
+      setTimeout(() => setSuccessful(false), 2000)
+    } catch (error) {
+      console.log(error)
+      setMessage('Não foi possível editar o serviço')
+    }
   }
 
   function closeDetails() {
@@ -76,7 +120,6 @@ export default function Painel() {
   function openDetails(id: number) {
     setIsModal(true)
     const Resultfilter = services.filter((item) => item.id === id)
-    editService(Resultfilter)
     setServicedetails(Resultfilter)
   }
 
@@ -128,7 +171,7 @@ export default function Painel() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
           <ServiceDetailsModal
             handleDelete={handleDelete}
-            handleEdit={handleEdit}
+            handleEdit={showEdit}
             closeDetails={closeDetails}
             servicedetails={servicesDetails}
           />
@@ -273,9 +316,9 @@ export default function Painel() {
                     Escolher arquivo
                   </button>
 
-                  {messageImages 
+                  {messageImages
                     ? <span className="text-sm text-[#a8a29e]">{messageImages}</span>
-                    :<span className="text-sm text-[#a8a29e]">
+                    : <span className="text-sm text-[#a8a29e]">
                       {nomeArquivo.length === 0
                         ? 'Nenhuma imagem selecionada'
                         : nomeArquivo.length === 1
@@ -298,7 +341,11 @@ export default function Painel() {
             </div>
 
             <div className="pt-2">
-              <Button onclick={addServiceButton} name={messageImages ? 'Editar Serviço' : 'Adicionar Serviço'} />
+
+              <Button
+                onclick={handleServiceSubmit}
+                name={editingServiceId === null ? 'Adicionar Serviço' : 'Editar Serviço'}
+              />
             </div>
           </div>
         </section>
