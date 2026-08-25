@@ -10,6 +10,7 @@ import { cleanFields } from "./functions/cleanFields";
 import { fileInput } from "./functions/fileInput";
 import { deleteService } from "./functions/deleteService";
 import ServiceDetailsModal from "./ServiceDetailsModal";
+import { editService } from "./functions/editService";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -22,6 +23,7 @@ export default function Painel() {
   const [valor, setValor] = useState('')
 
   const [message, setMessage] = useState('')
+  const [messageImages, setMessageImages] = useState('')
 
   const [services, setServices] = useState<serviceType[]>([])
   const [servicesDetails, setServicedetails] = useState<serviceType[]>([])
@@ -36,6 +38,27 @@ export default function Painel() {
     setServices((currentServices) =>
       currentServices.filter(item => item.id !== id)
     )
+  }
+
+  function handleEdit(id: number) {
+    setIsModal(false)
+    const Resultfilter = services.filter((item) => item.id === id)
+
+
+    setNome(Resultfilter[0].nome)
+    setDescricao(Resultfilter[0].descricao)
+    setValor(Resultfilter[0].valor.toString())
+    const qtd_imagens = Resultfilter[0].quantidade_imagens
+
+    setMessageImages('')
+    if (qtd_imagens === 0) {
+      setMessageImages('Nenhuma imagem selecionada')
+    } else if (qtd_imagens === 1) {
+      setMessageImages('1 imagem selecionada')
+    } else {
+      setMessageImages(`${qtd_imagens} imagens selecionadas`)
+    }
+
   }
 
   function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
@@ -53,6 +76,7 @@ export default function Painel() {
   function openDetails(id: number) {
     setIsModal(true)
     const Resultfilter = services.filter((item) => item.id === id)
+    editService(Resultfilter)
     setServicedetails(Resultfilter)
   }
 
@@ -104,6 +128,7 @@ export default function Painel() {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
           <ServiceDetailsModal
             handleDelete={handleDelete}
+            handleEdit={handleEdit}
             closeDetails={closeDetails}
             servicedetails={servicesDetails}
           />
@@ -141,7 +166,7 @@ export default function Painel() {
         </div>
 
         {/* Formulário */}
-        <section className="mb-16 overflow-hidden rounded-3xl border border-[#e7e5e4] bg-white shadow-[0_1px_3px_0_rgb(0_0_0_/_0.02),0_1px_2px_-1px_rgb(0_0_0_/_0.02)]">
+        <section id="gerenciar_Serviços" className="mb-16 overflow-hidden rounded-3xl border border-[#e7e5e4] bg-white shadow-[0_1px_3px_0_rgb(0_0_0_/_0.02),0_1px_2px_-1px_rgb(0_0_0_/_0.02)]">
           <div className="border-b border-[#f5f5f4] bg-[#fafaf9] px-8 py-6">
             <h3 className="font-serif text-2xl font-light text-[#1c1917]">
               Gerenciar serviços
@@ -248,14 +273,16 @@ export default function Painel() {
                     Escolher arquivo
                   </button>
 
-                  <span className="text-sm text-[#a8a29e]">
-                    {nomeArquivo.length === 0
-                      ? 'Nenhuma imagem selecionada'
-                      : nomeArquivo.length === 1
-                        ? nomeArquivo[0]
-                        : `${nomeArquivo.length} imagens selecionadas`
-                    }
-                  </span>
+                  {messageImages 
+                    ? <span className="text-sm text-[#a8a29e]">{messageImages}</span>
+                    :<span className="text-sm text-[#a8a29e]">
+                      {nomeArquivo.length === 0
+                        ? 'Nenhuma imagem selecionada'
+                        : nomeArquivo.length === 1
+                          ? nomeArquivo[0]
+                          : `${nomeArquivo.length} imagens selecionadas`
+                      }
+                    </span>}
 
                   <input
                     ref={inputRef}
@@ -271,7 +298,7 @@ export default function Painel() {
             </div>
 
             <div className="pt-2">
-              <Button onclick={addServiceButton} name="Adicionar Serviço" />
+              <Button onclick={addServiceButton} name={messageImages ? 'Editar Serviço' : 'Adicionar Serviço'} />
             </div>
           </div>
         </section>

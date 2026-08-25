@@ -7,21 +7,22 @@ type detailsProps = {
   servicedetails: serviceType[]
   closeDetails: () => void
   handleDelete: (id: number) => void
+  handleEdit: (id: number) => void
 }
 
-export default function ServiceDetailsModal({ servicedetails, closeDetails, handleDelete }: detailsProps) {
+export default function ServiceDetailsModal({ servicedetails, closeDetails, handleDelete, handleEdit }: detailsProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 h-full">
       {servicedetails.map((s) => (
         <div key={s.id} className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-xl">
           {/* Imagens */}
           <div className="relative">
-           {s.lista_url &&  
-           <ImageCarousel
-              images={s.lista_url.split(",")}
-              alt={s.nome}
-              intervalMs={3000}
-            />}
+            {s.lista_url &&
+              <ImageCarousel
+                images={s.lista_url.split(",")}
+                alt={s.nome}
+                intervalMs={3000}
+              />}
             <button
               aria-label="Fechar"
               onClick={closeDetails}
@@ -55,10 +56,12 @@ export default function ServiceDetailsModal({ servicedetails, closeDetails, hand
 
             {/* Ações */}
             <div className="mt-6 flex flex-col gap-3">
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 py-3 text-sm font-semibold text-white transition hover:bg-gray-800">
-                <Pencil size={15} />
-                EDITAR SERVIÇO
-              </button>
+              <a href="#gerenciar_Serviços">
+                <button onClick={() => handleEdit(s.id)} className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 py-3 text-sm font-semibold text-white transition hover:bg-gray-800">
+                  <Pencil size={15} />
+                  EDITAR SERVIÇO
+                </button>
+              </a>
               <button onClick={() => handleDelete(s.id)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-300 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-50">
                 <Trash2 size={15} />
                 EXCLUIR SERVIÇO
