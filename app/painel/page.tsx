@@ -2,7 +2,7 @@
 import { Button } from "@/components/button";
 import { serviceType } from "@/types/serviceType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Check, Pencil, Trash2, X } from "lucide-react";
+import { ArrowLeft, Check, LayoutDashboard, Pencil, Trash2, UsersRound, X } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { addService } from "./functions/addService";
@@ -11,6 +11,7 @@ import { fileInput } from "./functions/fileInput";
 import { deleteService } from "./functions/deleteService";
 import ServiceDetailsModal from "./ServiceDetailsModal";
 import { editService } from "./functions/editService";
+import { useKeyboard } from "@/hooks/useKeyboard";
 
 export default function Painel() {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -31,6 +32,9 @@ export default function Painel() {
 
   const [successful, setSuccessful] = useState(false)
   const [isModal, setIsModal] = useState(false)
+
+
+  const isKeyboardOpen = useKeyboard();  // hook
 
 
   async function handleDelete(id: number) {
@@ -88,7 +92,7 @@ export default function Painel() {
 
     try {
       await editService({ id: editingServiceId, nome, descricao, valor, images })
-      
+
       // map de atualização
       setServices((currentServices) => currentServices.map((service) =>
         service.id === editingServiceId
@@ -102,7 +106,7 @@ export default function Painel() {
           }
           : service
       ))
-      
+
       setEditingServiceId(null)
       setMessage('')
       setSuccessful(true)
@@ -144,7 +148,7 @@ export default function Painel() {
 
 
   return (
-    <main className="min-h-screen bg-[#faf9f7] text-[#1c1917]">
+    <main className="min-h-screen bg-[#faf9f7] text-[#1c1917] relative">
 
       {/* Modal de sucesso */}
       {successful && (
@@ -418,6 +422,23 @@ export default function Painel() {
           )}
         </section>
       </div>
+
+      {/* nav */}
+      <footer className={`w-full flex fixed bottom-0 ${isKeyboardOpen ? 'hidden' : 'block'}`}>
+        <div className="flex flex-col justify-center items-center flex-1 py-2 bg-white">
+          <LayoutDashboard width={25} height={25} id="painel" />
+          <label className="text-[0.8rem] mt-2" htmlFor="painel">
+            Painel
+          </label>
+        </div>
+
+        <div className="flex flex-col justify-center items-center bg-footer-NAV flex-1">
+          <UsersRound width={25} height={25} id="clientes" />
+          <label className="text-[0.8rem] mt-2" htmlFor="clientes">
+            Painel
+          </label>
+        </div>
+      </footer>
     </main>
   );
 }
