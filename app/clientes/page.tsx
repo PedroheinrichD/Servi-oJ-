@@ -1,18 +1,37 @@
 "use client"
+import { clienteType } from "@/types/clienteType";
+import { api } from "@/utils/api";
 import { ArrowLeft, Clock } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Clientes() {
-    const [data, setData] = useState('')
-
-    
-
     const hoje = new Date();
     const ano = hoje.getFullYear();
     const mes = String(hoje.getMonth() + 1).padStart(2, "0");
     const dia = String(hoje.getDate()).padStart(2, "0");
     const dataMinima = `${ano}-${mes}-${dia}`;
+
+
+    const [data, setData] = useState('')
+    const [clientes, setClientes] = useState<clienteType[]>([])
+
+
+
+    useEffect(() => {
+        async function handleGetClientes() {
+            const url = data
+                ? `/api/clientes?data=${data}`
+                : 'api/clientes'
+
+            const req = await api.get(url)
+            setClientes(req.data)
+        }
+        handleGetClientes()
+    }, [data])
+
+    console.log(clientes);
+
 
 
     return (
@@ -59,40 +78,41 @@ export default function Clientes() {
                 />
             </div>
 
-            <main className="bg-[#faf9f7] text-[#1c1917] px-5 flex flex-col items-center gap-8">
-
+            <main className="bg-[#faf9f7] text-[#1c1917] p-6 flex flex-col items-center gap-8">
                 {/* Clients List */}
-                <div className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5 shadow-md md:max-w-2xl">
-                    {/* Linha superior */}
-                    <div className="flex items-start justify-between mb-4 gap-3">
-                        <div className="min-w-0 flex-1">
-                            <h3 className="text-lg font-semibold text-[#1a1a1a] truncate">
-                                Carlos da Silva Moreira de Tal
-                            </h3>
-                            <p className="text-sm text-[#666666] mt-0.5 truncate">
-                                Massagem Relaxante com Aromaterapia e Pedras Quentes
-                            </p>
+                {clientes.map((c) => (
+                    <div key={c.cliente_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5 shadow-md md:max-w-2xl">
+                        {/* Linha superior */}
+                        <div className="flex items-start justify-between mb-4 gap-3">
+                            <div className="min-w-0 flex-1">
+                                <h3 className="text-lg font-semibold text-[#1a1a1a] truncate">
+                                    {c.cliente_nome}
+                                </h3>
+                                <p className="text-sm text-[#666666] mt-0.5 truncate">
+                                    {c.servico_nome}
+                                </p>
+                            </div>
+
+                            <div className="shrink-0 bg-white border border-[#d4d0c8] rounded px-3 py-1.5 text-sm font-medium text-[#333333]">
+                                {c.hora.slice(0, 5)}
+                            </div>
                         </div>
 
-                        <div className="shrink-0 bg-white border border-[#d4d0c8] rounded px-3 py-1.5 text-sm font-medium text-[#333333]">
-                            10:00 AM
+                        {/* Divisor */}
+                        <div className="border-t border-[#c8c4bc] my-3" />
+
+                        {/* Linha inferior */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-[#5a5a5a]">
+                                <Clock width={16} height={16} />
+                                <span className="text-sm">{c.status}</span>
+                            </div>
+                            <button className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
+                                Detalhes
+                            </button>
                         </div>
                     </div>
-
-                    {/* Divisor */}
-                    <div className="border-t border-[#c8c4bc] my-3" />
-
-                    {/* Linha inferior */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-[#5a5a5a]">
-                            <Clock width={16} height={16} />
-                            <span className="text-sm">Pendente</span>
-                        </div>
-                        <button className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
-                            Detalhes
-                        </button>
-                    </div>
-                </div>
+                ))}
             </main>
         </div>
     )
