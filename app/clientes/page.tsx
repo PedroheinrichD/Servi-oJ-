@@ -1,22 +1,22 @@
 "use client"
+import { useKeyboard } from "@/hooks/useKeyboard";
 import { clienteType } from "@/types/clienteType";
 import { api } from "@/utils/api";
-import { ArrowLeft, Clock } from "lucide-react"
+import { ArrowLeft, Clock, LayoutDashboard, UsersRound } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react";
 
 export default function Clientes() {
+    const isKeyboardOpen = useKeyboard();  // hook
+
     const hoje = new Date();
     const ano = hoje.getFullYear();
     const mes = String(hoje.getMonth() + 1).padStart(2, "0");
     const dia = String(hoje.getDate()).padStart(2, "0");
     const dataMinima = `${ano}-${mes}-${dia}`;
 
-
     const [data, setData] = useState('')
     const [clientes, setClientes] = useState<clienteType[]>([])
-
-
 
     useEffect(() => {
         async function handleGetClientes() {
@@ -114,6 +114,23 @@ export default function Clientes() {
                     </div>
                 ))}
             </main>
+
+            {/* nav */}
+            <footer className={`w-full flex fixed bottom-0 ${isKeyboardOpen ? 'hidden' : 'block'}`}>
+                <Link href={'/painel'} className="flex flex-1 flex-col items-center justify-center py-2 bg-footer-NAV transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_-4px_12px_rgba(0,0,0,0.08)] active:scale-[0.98]">
+                    <LayoutDashboard width={25} height={25} id="painel" />
+                    <label className="text-[0.8rem] mt-2" htmlFor="painel">
+                        Painel
+                    </label>
+                </Link>
+
+                <div className="flex flex-1 flex-col items-center justify-center bg-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_-4px_12px_rgba(0,0,0,0.08)] active:scale-[0.98]">
+                    <UsersRound width={25} height={25} id="clientes" />
+                    <label className="text-[0.8rem] mt-2" htmlFor="clientes">
+                        Clientes
+                    </label>
+                </div>
+            </footer>
         </div>
     )
 

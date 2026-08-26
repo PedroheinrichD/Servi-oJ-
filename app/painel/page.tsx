@@ -425,19 +425,19 @@ export default function Painel() {
 
       {/* nav */}
       <footer className={`w-full flex fixed bottom-0 ${isKeyboardOpen ? 'hidden' : 'block'}`}>
-        <div className="flex flex-col justify-center items-center flex-1 py-2 bg-white">
+        <div className="flex flex-1 flex-col items-center justify-center py-2 bg-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_-4px_12px_rgba(0,0,0,0.08)] active:scale-[0.98]">
           <LayoutDashboard width={25} height={25} id="painel" />
           <label className="text-[0.8rem] mt-2" htmlFor="painel">
             Painel
           </label>
         </div>
 
-        <div className="flex flex-col justify-center items-center bg-footer-NAV flex-1">
+        <Link href={'/clientes'} className="flex flex-1 flex-col items-center justify-center bg-footer-NAV transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-[0_-4px_12px_rgba(0,0,0,0.08)] active:scale-[0.98]">
           <UsersRound width={25} height={25} id="clientes" />
           <label className="text-[0.8rem] mt-2" htmlFor="clientes">
             Clientes
           </label>
-        </div>
+        </Link>
       </footer>
     </main>
   );
