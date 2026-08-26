@@ -1,7 +1,20 @@
+"use client"
 import { ArrowLeft, Clock } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react";
 
 export default function Clientes() {
+    const [data, setData] = useState('')
+
+    
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+    const dataMinima = `${ano}-${mes}-${dia}`;
+
+
     return (
         <div className="space-y-7">
             {/* Header */}
@@ -36,8 +49,18 @@ export default function Clientes() {
                 </ul>
             </nav>
 
+            <div className="text-end ">
+                <input
+                    className="mr-7 border  border-[#C3C8C3] bg-[#F5F3EE] rounded-md p-2"
+                    type="date"
+                    min={dataMinima}
+                    value={data}
+                    onChange={(e) => setData(e.target.value)}
+                />
+            </div>
+
             <main className="bg-[#faf9f7] text-[#1c1917] px-5 flex flex-col items-center gap-8">
-                
+
                 {/* Clients List */}
                 <div className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5 shadow-md md:max-w-2xl">
                     {/* Linha superior */}
@@ -62,7 +85,7 @@ export default function Clientes() {
                     {/* Linha inferior */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-[#5a5a5a]">
-                           <Clock width={16} height={16}/>
+                            <Clock width={16} height={16} />
                             <span className="text-sm">Pendente</span>
                         </div>
                         <button className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
