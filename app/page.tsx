@@ -1,13 +1,9 @@
-"use client";
-
 // ElixirLanding.tsx
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { useEffect, useState } from "react";
 import ImageCarousel from "./painel/ImageCarousel";
-import { serviceType } from "@/types/serviceType";
-import { api } from "@/utils/api";
+import { getServicos } from "@/lib/queries";
 
 // ─── Icons (inline SVGs) ─────────────────────────────────────────
 const MenuIcon = ({ className }: { className?: string }) => (
@@ -122,9 +118,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   const imageList = images
     ? images
-      .split(",")
-      .map((image) => image.trim())
-      .filter(Boolean)
+        .split(",")
+        .map((image) => image.trim())
+        .filter(Boolean)
     : [];
 
   return (
@@ -177,21 +173,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 };
 
 // ─── Main Component ──────────────────────────────────────────────
-const Page: React.FC = () => {
-  const [services, setServices] = useState<serviceType[]>([]);
-
-  useEffect(() => {
-    async function loadServices() {
-      try {
-        const response = await api.get<serviceType[]>("/api/servico");
-        setServices(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    loadServices();
-  }, []);
+async function Page() {
+  const services = await getServicos();
 
   const serviceIcons = [
     <MassageIcon key="massage" />,
@@ -270,7 +253,7 @@ const Page: React.FC = () => {
           Agende seu horário e cuide de você.
         </p>
 
-        <Link href={'/agendamento'}>
+        <Link href={"/agendamento"}>
           <button className="w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
             Agendar Agora
           </button>
@@ -317,6 +300,6 @@ const Page: React.FC = () => {
       </footer>
     </div>
   );
-};
+}
 
 export default Page;

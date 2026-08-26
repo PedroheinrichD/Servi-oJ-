@@ -1,7 +1,6 @@
-import Agendamento from "./Agendamento"
+// app/agendamento/page.tsx
+import AgendamentoForm from "./AgendamentoForm";
 
-export default function AgendamentoPage() {
-    return(
-        <Agendamento/>
-    )
-};
+export default async function AgendamentoPage() {
+  return <AgendamentoForm />;
+}
