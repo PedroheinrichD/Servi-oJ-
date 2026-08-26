@@ -435,7 +435,7 @@ export default function Painel() {
         <div className="flex flex-col justify-center items-center bg-footer-NAV flex-1">
           <UsersRound width={25} height={25} id="clientes" />
           <label className="text-[0.8rem] mt-2" htmlFor="clientes">
-            Painel
+            Clientes
           </label>
         </div>
       </footer>
