@@ -96,8 +96,17 @@ export default function Clientes() {
                     <li>
                         <button
                             type="button"
-                            onClick={() => setStatusFilter("aguardando")}
-                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "aguardando" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                            onClick={() => setStatusFilter("Cancelado")}
+                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "Cancelado" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                        >
+                            Cancelados
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            type="button"
+
+                            onClick={() => setStatusFilter("aguardando")}                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "aguardando" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
                         >
                             Aguardando
                         </button>
@@ -131,7 +140,7 @@ export default function Clientes() {
             <main className="bg-[#faf9f7] text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-4">
                 {/* Clients List */}
                 {clientes.map((c) => (
-                    <div key={c.agendamento_id} className={`w-full max-w-[420px] rounded-lg border-l-4 ${c.status === "Atendido" ? "border-[#5d8d68]" : "border-[rgb(139,115,85)]"}  bg-[#eae8e3] p-5 shadow-md md:max-w-2xl`}>
+                    <div key={c.agendamento_id} className={`w-full max-w-[420px] rounded-lg border-l-4 ${c.status === "Atendido" ? "border-[#5d8d68]" : c.status === "Cancelado" ? "border-[#ba1a1a]" : "border-[rgb(139,115,85)]"} bg-[#eae8e3] p-5 shadow-md md:max-w-2xl`}>
                         {/* Linha superior */}
                         <div className="flex items-start justify-between mb-4 gap-3">
                             <div className="min-w-0 flex-1">
@@ -156,7 +165,7 @@ export default function Clientes() {
                             <div className="flex items-center gap-2 text-[#5a5a5a]">
                                 {statusFilter === 'Atendido' ? <CircleCheck width={16} height={16} /> : <Clock width={16} height={16} />}
                                 
-                                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${c.status === "Atendido" ? "bg-[#d9e6dc] text-[#3e4943]" : "bg-[#fddab2] text-[#785e3e]"}`}>
+                                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${c.status === "Atendido" ? "bg-[#d9e6dc] text-[#3e4943]" : c.status === "Cancelado" ? "bg-[#ffdad6] text-[#93000a]" : "bg-[#fddab2] text-[#785e3e]"}`}>
                                     {c.status}
                                 </span>
                             </div>

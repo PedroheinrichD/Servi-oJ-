@@ -15,7 +15,21 @@ export function ClienteDetails({ closeModal, result, loadClientes }: detailsProp
   async function concluirAgendamento(id: number){
     try{
       const req = await api.put('/api/status',{
-        agendamento_id: id
+        agendamento_id: id,
+        status: 'Atendido'
+      })
+      closeModal();
+      loadClientes();
+    }catch{
+      console.log('erro aqui no envio do ID');
+    }
+  }
+
+  async function cancelarAgendamento(id: number){
+    try{
+      const req = await api.put('/api/status',{
+        agendamento_id: id,
+        status: 'Cancelado'
       })
       closeModal();
       loadClientes();
@@ -84,7 +98,7 @@ export function ClienteDetails({ closeModal, result, loadClientes }: detailsProp
                 <Check size={20} />
                 Concluir
               </button>
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#ba1a1a]/30 py-3 text-sm font-semibold text-[#ba1a1a] transition hover:bg-[#ffdad6]/40">
+              <button onClick={() => cancelarAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#ba1a1a]/30 py-3 text-sm font-semibold text-[#ba1a1a] transition hover:bg-[#ffdad6]/40">
                 <X size={20} />
                 Cancelar
               </button>
