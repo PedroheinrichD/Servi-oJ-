@@ -365,7 +365,7 @@ export default function Painel() {
           </span>
         </div>
 
-        <section className="space-y-4">
+        <section className="space-y-4 mb-10">
           {services.map((s) => (
             <div
               key={s.id}

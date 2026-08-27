@@ -105,7 +105,7 @@ export default function Clientes() {
             )}
 
 
-            <main className="bg-[#faf9f7] text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-8">
+            <main className="bg-[#faf9f7]  text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-8">
                 {/* Clients List */}
                 {clientes.map((c) => (
                     <div key={c.cliente_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5  shadow-md md:max-w-2xl">
