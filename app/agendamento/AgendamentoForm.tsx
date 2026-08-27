@@ -189,20 +189,6 @@ export default function Agendamento() {
           com * são obrigatórios.
         </p>
 
-        {confirmado && (
-          <div className="af-banner">
-            <span className="af-banner-icon">
-              <Check size={14} strokeWidth={3} />
-            </span>
-            <span>Agendamento confirmado.</span>
-            <span className="af-banner-actions">
-              <button type="button" onClick={handleNovoAgendamento}>
-                Novo agendamento
-              </button>
-            </span>
-          </div>
-        )}
-
         <form className="af-form" onSubmit={handleSubmit} noValidate>
           <div className="af-section-title">Seus dados</div>
           <div className="af-grid">
@@ -324,6 +310,23 @@ export default function Agendamento() {
           </button>
         </form>
       </div>
+
+      {confirmado && (
+        <>
+          <div className="af-banner-backdrop" aria-hidden="true" />
+          <div className="af-banner" role="status" aria-live="polite">
+            <span className="af-banner-icon">
+              <Check size={14} strokeWidth={3} />
+            </span>
+            <span>Agendamento confirmado.</span>
+            <span className="af-banner-actions">
+              <button type="button" onClick={handleNovoAgendamento}>
+                Novo agendamento
+              </button>
+            </span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

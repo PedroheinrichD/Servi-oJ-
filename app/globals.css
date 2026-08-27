@@ -649,11 +649,11 @@ body {
 
 .af-banner {
   position: fixed;
-  top: 1.5rem;
+  top: 50%;
   left: 50%;
-  z-index: 20;
+  z-index: 50;
   width: min(calc(100% - 2rem), 680px);
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   padding: 1rem 1.25rem;
   background: #F0EEE9;
   border: 1px solid #C3C8C3;
@@ -663,12 +663,20 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  animation: af-slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: af-notification-in 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.af-banner-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgb(15 18 16 / 58%);
+  backdrop-filter: blur(2px);
+  animation: af-backdrop-in 0.35s ease-out both;
 }
 
 @media (max-width: 640px) {
   .af-banner {
-    top: 1rem;
     width: calc(100% - 2rem);
   }
 }
@@ -730,7 +738,8 @@ body {
   .af-error,
   .af-content,
   .af-section-title,
-  .af-field-group {
+  .af-field-group,
+  .af-banner-backdrop {
     transition: none;
     animation: none;
   }
@@ -745,4 +754,24 @@ input[type="date"].af-input::-webkit-calendar-picker-indicator {
 
 input[type="date"].af-input::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
+}
+
+@keyframes af-notification-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes af-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
