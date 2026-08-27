@@ -3,6 +3,7 @@ import pool from "@/lib/db";
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const data = searchParams.get("data");
+    const status = searchParams.get("status") || "aguardando";
     
     try {
         const [rows] = await pool.query(
@@ -24,10 +25,10 @@ export async function GET(request: Request) {
         ON a.cliente_id = c.id
       INNER JOIN servicos AS s
         ON a.servico_id = s.id
-        ${data ? "WHERE a.data = ? AND a.status = 'aguardando' " : ""} 
+        WHERE a.status = ? ${data ? "AND a.data = ?" : ""}
         ORDER BY a.hora ASC
         `,
-        data ? [data] : []
+        data ? [status, data] : [status]
         );
         return Response.json(rows);
     } catch (error) {

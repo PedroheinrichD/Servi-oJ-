@@ -20,24 +20,25 @@ export default function Clientes() {
     const [clientes, setClientes] = useState<clienteType[]>([])
     const [isModal, setIsModal] = useState(false)
     const [result, setResult] = useState<clienteType[]>([])
+    const [statusFilter, setStatusFilter] = useState("aguardando")
 
     useEffect(() => {
         async function handleGetClientes() {
             const url = data
-                ? `/api/clientes?data=${data}`
+                ? `/api/clientes?data=${data}&status=${statusFilter}`
                 : 'api/clientes'
 
             const req = await api.get(url)
             setClientes(req.data)
         }
         handleGetClientes()
-    }, [data])
+    }, [data, statusFilter])
 
 
     // carregar clientes após status mudar
     async function loadClientes() {
         const url = data
-            ? `/api/clientes?data=${data}`
+            ? `/api/clientes?data=${data}&status=${statusFilter}`
             : 'api/clientes'
 
         const req = await api.get(url)
@@ -63,7 +64,7 @@ export default function Clientes() {
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h1 className="mt-1 font-serif text-4xl font-light text-[#1c1917]">
-                            Clientes
+                            Agendamentos
                         </h1>
                         <p className="text-sm font-medium uppercase tracking-[0.2em] text-textTitle">
                             agendamentos
@@ -83,13 +84,24 @@ export default function Clientes() {
             {/* filters */}
             <nav className="mr-8 mt-4">
                 <ul className="flex justify-end gap-2">
-                    <li className="group relative isolate overflow-hidden rounded-full border border-gray-400 px-4 py-1 text-[0.9rem] transition-colors duration-300 hover:text-white before:absolute before:inset-y-0 before:left-0 before:-z-10 before:w-0 before:bg-black before:transition-[width] before:duration-500 before:ease-out hover:before:w-full">
-                        <span className="relative z-10">Atendidos</span>
+                    <li>
+                        <button
+                            type="button"
+                            onClick={() => setStatusFilter("Atendido")}
+                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "Atendido" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                        >
+                            Atendidos
+                        </button>
                     </li>
-                    <li className="group relative isolate overflow-hidden rounded-full border border-gray-400 px-4 py-1 text-[0.9rem] transition-colors duration-300 hover:text-white before:absolute before:inset-y-0 before:left-0 before:-z-10 before:w-0 before:bg-black before:transition-[width] before:duration-500 before:ease-out hover:before:w-full">
-                        <span className="relative z-10">Aguardando</span>
+                    <li>
+                        <button
+                            type="button"
+                            onClick={() => setStatusFilter("aguardando")}
+                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "aguardando" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                        >
+                            Aguardando
+                        </button>
                     </li>
-                    <li className="border rounded-full px-4 py-1 bg-black text-white text-[0.9rem]">Hoje</li>
                 </ul>
             </nav>
 
@@ -116,10 +128,10 @@ export default function Clientes() {
             )}
 
 
-            <main className="bg-[#faf9f7]  text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-8">
+            <main className="bg-[#faf9f7] text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-4">
                 {/* Clients List */}
                 {clientes.map((c) => (
-                    <div key={c.cliente_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5  shadow-md md:max-w-2xl">
+                    <div key={c.agendamento_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5 shadow-md md:max-w-2xl">
                         {/* Linha superior */}
                         <div className="flex items-start justify-between mb-4 gap-3">
                             <div className="min-w-0 flex-1">
@@ -143,7 +155,9 @@ export default function Clientes() {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 text-[#5a5a5a]">
                                 <Clock width={16} height={16} />
-                                <span className="text-sm">{c.status}</span>
+                                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${c.status === "Atendido" ? "bg-[#d9e6dc] text-[#3e4943]" : "bg-[#fddab2] text-[#785e3e]"}`}>
+                                    {c.status}
+                                </span>
                             </div>
                             <button onClick={() => handleDetails(c.cliente_id)} className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
                                 Detalhes

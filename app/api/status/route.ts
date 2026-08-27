@@ -6,7 +6,7 @@ export async function PUT(request: Request) {
     try {
         await pool.query(`
         UPDATE agendamentos
-        SET status = 'atendido'
+        SET status = 'Atendido'
         WHERE id = ? AND status = 'aguardando';    
     `,
             [agendamento_id]
