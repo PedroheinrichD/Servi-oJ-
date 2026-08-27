@@ -58,9 +58,9 @@ export default function Clientes() {
 
 
     return (
-        <div className="space-y-7">
+        <div className="clientes-page space-y-7">
             {/* Header */}
-            < header className="mx-auto max-w-3xl px-6 mt-8" >
+            < header className="clientes-header mx-auto max-w-3xl px-6 mt-8" >
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h1 className="mt-1 font-serif text-4xl font-light text-[#1c1917]">
@@ -82,13 +82,13 @@ export default function Clientes() {
 
 
             {/* filters */}
-            <nav className="mx-auto mt-4 max-w-3xl px-6">
+            <nav className="clientes-tabs mx-auto mt-4 max-w-3xl px-6" aria-label="Filtrar clientes">
                 <ul className="flex justify-start gap-2">
                     <li>
                         <button
                             type="button"
                             onClick={() => setStatusFilter("Atendido")}
-                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "Atendido" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-all duration-300 ${statusFilter === "Atendido" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
                         >
                             Atendidos
                         </button>
@@ -97,7 +97,7 @@ export default function Clientes() {
                         <button
                             type="button"
                             onClick={() => setStatusFilter("Cancelado")}
-                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "Cancelado" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                            className={`rounded-full border px-4 py-1 text-[0.9rem] transition-all duration-300 ${statusFilter === "Cancelado" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
                         >
                             Cancelados
                         </button>
@@ -106,7 +106,7 @@ export default function Clientes() {
                         <button
                             type="button"
 
-                            onClick={() => setStatusFilter("aguardando")} className={`rounded-full border px-4 py-1 text-[0.9rem] transition-colors ${statusFilter === "aguardando" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
+                            onClick={() => setStatusFilter("aguardando")} className={`rounded-full border px-4 py-1 text-[0.9rem] transition-all duration-300 ${statusFilter === "aguardando" ? "border-black bg-black text-white" : "border-gray-400 hover:bg-gray-100"}`}
                         >
                             Aguardando
                         </button>
@@ -114,7 +114,7 @@ export default function Clientes() {
                 </ul>
             </nav>
 
-            <div className="text-end ">
+            <div className="clientes-date text-end ">
                 <input
                     className="mr-7 border  border-[#C3C8C3] bg-[#F5F3EE] rounded-md p-2"
                     type="date"
@@ -139,7 +139,7 @@ export default function Clientes() {
 
             <main className="bg-[#faf9f7] text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-4">
                 {/* Lista de Serviços */}
-                <div className="mb-6 flex w-full max-w-2xl items-center gap-4 border-l-2 border-[#d6d3d1] pl-3">
+                <div className="clientes-list-heading mb-6 flex w-full max-w-2xl items-center gap-4 border-l-2 border-[#d6d3d1] pl-3">
                     <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#a8a29e]">
                         {statusFilter === "Atendido"
                             ? "Clientes atendidos"
@@ -154,8 +154,8 @@ export default function Clientes() {
                 </div>
 
                 {/* Clients List */}
-                {clientes.map((c) => (
-                    <div key={c.agendamento_id} className={`w-full max-w-[420px] rounded-lg border-l-4 ${c.status === "Atendido" ? "border-[#5d8d68]" : c.status === "Cancelado" ? "border-[#ba1a1a]" : "border-[rgb(139,115,85)]"} bg-[#eae8e3] p-5 shadow-md md:max-w-2xl`}>
+                {clientes.map((c, index) => (
+                    <div key={c.agendamento_id} style={{ animationDelay: `${index * 70}ms` }} className={`cliente-card w-full max-w-[420px] rounded-lg border-l-4 ${c.status === "Atendido" ? "border-[#5d8d68]" : c.status === "Cancelado" ? "border-[#ba1a1a]" : "border-[rgb(139,115,85)]"} bg-[#eae8e3] p-5 shadow-md md:max-w-2xl`}>
                         {/* Linha superior */}
                         <div className="flex items-start justify-between mb-4 gap-3">
                             <div className="min-w-0 flex-1">

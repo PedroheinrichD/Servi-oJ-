@@ -155,7 +155,7 @@ export default function Painel() {
 
 
   return (
-    <main className="min-h-screen bg-[#faf9f7] text-[#1c1917] relative">
+    <main className="painel-page min-h-screen bg-[#faf9f7] text-[#1c1917] relative">
 
       {/* Modal de sucesso */}
       {successful && (
@@ -192,7 +192,7 @@ export default function Painel() {
       <div className="mx-auto max-w-3xl px-6 py-12">
 
         {/* Header */}
-        <div className="mb-12 flex items-start justify-between">
+        <div className="painel-header mb-12 flex items-start justify-between">
           <div>
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-textTitle">
               {saudacao},
@@ -210,7 +210,7 @@ export default function Painel() {
         </div>
 
         {/* Visão Geral */}
-        <div className="mb-10">
+        <div className="painel-overview mb-10">
           <div className="flex items-center gap-4">
             <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#a8a29e]">
               Visão Geral
@@ -220,7 +220,7 @@ export default function Painel() {
         </div>
 
         {/* Formulário */}
-        <section id="gerenciar_Serviços" className="mb-16 overflow-hidden rounded-3xl border border-[#e7e5e4] bg-white shadow-[0_1px_3px_0_rgb(0_0_0_/_0.02),0_1px_2px_-1px_rgb(0_0_0_/_0.02)]">
+        <section id="gerenciar_Serviços" className="painel-form mb-16 overflow-hidden rounded-3xl border border-[#e7e5e4] bg-white shadow-[0_1px_3px_0_rgb(0_0_0_/_0.02),0_1px_2px_-1px_rgb(0_0_0_/_0.02)]">
           <div className="border-b border-[#f5f5f4] bg-[#fafaf9] px-8 py-6">
             <h3 className="font-serif text-2xl font-light text-[#1c1917]">
               Gerenciar serviços
@@ -362,7 +362,7 @@ export default function Painel() {
         </section>
 
         {/* Lista de Serviços */}
-        <div className="mb-6 flex items-center gap-4">
+        <div className="painel-services-heading mb-6 flex items-center gap-4">
           <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#a8a29e]">
             Serviços cadastrados
           </h2>
@@ -373,10 +373,11 @@ export default function Painel() {
         </div>
 
         <section className="space-y-4 mb-10">
-          {services.map((s) => (
+          {services.map((s, index) => (
             <div
               key={s.id}
-              className="group relative overflow-hidden rounded-2xl border border-[#e7e5e4] bg-white p-6 transition-all hover:border-[#d6d3d1] hover:shadow-lg hover:shadow-black/5"
+              style={{ animationDelay: `${index * 70}ms` }}
+              className="painel-service-card group relative overflow-hidden rounded-2xl border border-[#e7e5e4] bg-white p-6 transition-all hover:border-[#d6d3d1] hover:shadow-lg hover:shadow-black/5"
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-1">

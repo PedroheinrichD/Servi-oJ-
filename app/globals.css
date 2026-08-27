@@ -81,6 +81,104 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes clientes-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes clientes-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.clientes-header,
+.clientes-tabs,
+.clientes-date,
+.clientes-list-heading {
+  animation: clientes-fade-in 500ms ease-out both;
+}
+
+.clientes-tabs {
+  animation-delay: 80ms;
+}
+
+.clientes-date {
+  animation-delay: 140ms;
+}
+
+.clientes-list-heading {
+  animation-delay: 200ms;
+}
+
+.cliente-card {
+  animation: clientes-fade-up 450ms ease-out both;
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+
+.cliente-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgb(28 25 23 / 8%);
+}
+
+.painel-header,
+.painel-overview,
+.painel-form,
+.painel-services-heading {
+  animation: clientes-fade-in 500ms ease-out both;
+}
+
+.painel-overview {
+  animation-delay: 80ms;
+}
+
+.painel-form {
+  animation-delay: 140ms;
+}
+
+.painel-services-heading {
+  animation-delay: 220ms;
+}
+
+.painel-service-card {
+  animation: clientes-fade-up 450ms ease-out both;
+  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
+}
+
+.painel-service-card:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clientes-header,
+  .clientes-tabs,
+  .clientes-date,
+  .clientes-list-heading,
+  .cliente-card,
+  .painel-header,
+  .painel-overview,
+  .painel-form,
+  .painel-services-heading,
+  .painel-service-card {
+    animation: none;
+  }
+
+  .cliente-card,
+  .painel-service-card,
+  .clientes-tabs button {
+    transition: none;
+  }
+}
+
 @layer components {
 
   /* ─── Font families ─── */
