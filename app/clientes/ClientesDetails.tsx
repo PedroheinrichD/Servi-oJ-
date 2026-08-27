@@ -1,14 +1,29 @@
 import { clienteType } from "@/types/clienteType"
+import { api } from "@/utils/api"
 import { Check, CreditCard, MapPin, Phone, X } from "lucide-react"
 import Link from "next/link"
 
 type detailsProps = {
   closeModal: () => void
+  loadClientes: () => void
   result: clienteType[]
 }
 
 
-export function ClienteDetails({ closeModal, result }: detailsProps) {
+export function ClienteDetails({ closeModal, result, loadClientes }: detailsProps) {
+
+  async function concluirAgendamento(id: number){
+    try{
+      const req = await api.put('/api/status',{
+        agendamento_id: id
+      })
+      closeModal();
+      loadClientes();
+    }catch{
+      console.log('erro aqui no envio do ID');
+    }
+  }
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm">
@@ -65,7 +80,7 @@ export function ClienteDetails({ closeModal, result }: detailsProps) {
 
             {/* Ações */}
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#101a15] py-3 text-sm font-semibold text-white transition hover:bg-[#30312e]">
+              <button onClick={() => concluirAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#101a15] py-3 text-sm font-semibold text-white transition hover:bg-[#30312e]">
                 <Check size={20} />
                 Concluir
               </button>

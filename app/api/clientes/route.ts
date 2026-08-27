@@ -24,7 +24,7 @@ export async function GET(request: Request) {
         ON a.cliente_id = c.id
       INNER JOIN servicos AS s
         ON a.servico_id = s.id
-        ${data ? "WHERE a.data = ?" : ""} 
+        ${data ? "WHERE a.data = ? AND a.status = 'aguardando' " : ""} 
         ORDER BY a.hora ASC
         `,
         data ? [data] : []

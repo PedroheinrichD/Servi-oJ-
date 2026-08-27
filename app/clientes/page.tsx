@@ -34,17 +34,27 @@ export default function Clientes() {
     }, [data])
 
 
-    function handleCloseModal(){
+    // carregar clientes após status mudar
+    async function loadClientes() {
+        const url = data
+            ? `/api/clientes?data=${data}`
+            : 'api/clientes'
+
+        const req = await api.get(url)
+        setClientes(req.data)
+    }
+
+    function handleCloseModal() {
         setIsModal(false)
     }
 
-    async function handleDetails(id: number){
+    async function handleDetails(id: number) {
         setIsModal(true)
 
-         const filter =  await clientes.filter(item => item.cliente_id === id)
-         setResult(filter)
+        const filter = await clientes.filter(item => item.cliente_id === id)
+        setResult(filter)
     }
-    
+
 
     return (
         <div className="space-y-7">
@@ -100,6 +110,7 @@ export default function Clientes() {
                     <ClienteDetails
                         closeModal={handleCloseModal}
                         result={result}
+                        loadClientes={loadClientes}
                     />
                 </div>
             )}
