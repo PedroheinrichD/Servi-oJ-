@@ -17,7 +17,8 @@ export async function GET(request: Request) {
         a.status,
         a.valor_na_epoca,
         a.data,
-        a.hora
+        a.hora,
+        c.endereco
       FROM agendamentos AS a
       INNER JOIN clientes AS c
         ON a.cliente_id = c.id

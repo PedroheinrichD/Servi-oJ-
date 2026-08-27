@@ -8,4 +8,6 @@ export type clienteType = {
     data: string
     hora: string
     status: string
+    valor_na_epoca: number
+    endereco: string
 }

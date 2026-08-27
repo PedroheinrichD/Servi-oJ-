@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import { ArrowLeft, Clock, LayoutDashboard, UsersRound } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react";
+import { ClienteDetails } from "./ClientesDetails";
 
 export default function Clientes() {
     const isKeyboardOpen = useKeyboard();  // hook
@@ -15,8 +16,10 @@ export default function Clientes() {
     const dia = String(hoje.getDate()).padStart(2, "0");
     const dataMinima = `${ano}-${mes}-${dia}`;
 
-    const [data, setData] = useState('')
+    const [data, setData] = useState(dataMinima)
     const [clientes, setClientes] = useState<clienteType[]>([])
+    const [isModal, setIsModal] = useState(false)
+    const [result, setResult] = useState<clienteType[]>([])
 
     useEffect(() => {
         async function handleGetClientes() {
@@ -30,9 +33,18 @@ export default function Clientes() {
         handleGetClientes()
     }, [data])
 
-    console.log(clientes);
 
+    function handleCloseModal(){
+        setIsModal(false)
+    }
 
+    async function handleDetails(id: number){
+        setIsModal(true)
+
+         const filter =  await clientes.filter(item => item.cliente_id === id)
+         setResult(filter)
+    }
+    
 
     return (
         <div className="space-y-7">
@@ -61,10 +73,13 @@ export default function Clientes() {
             {/* filters */}
             <nav className="mr-8 mt-4">
                 <ul className="flex justify-end gap-2">
-                    <li className="border rounded-full px-4 py-1 bg-black text-white text-[0.9rem]">Hoje</li>
                     <li className="group relative isolate overflow-hidden rounded-full border border-gray-400 px-4 py-1 text-[0.9rem] transition-colors duration-300 hover:text-white before:absolute before:inset-y-0 before:left-0 before:-z-10 before:w-0 before:bg-black before:transition-[width] before:duration-500 before:ease-out hover:before:w-full">
-                        <span className="relative z-10">Todos</span>
+                        <span className="relative z-10">Atendidos</span>
                     </li>
+                    <li className="group relative isolate overflow-hidden rounded-full border border-gray-400 px-4 py-1 text-[0.9rem] transition-colors duration-300 hover:text-white before:absolute before:inset-y-0 before:left-0 before:-z-10 before:w-0 before:bg-black before:transition-[width] before:duration-500 before:ease-out hover:before:w-full">
+                        <span className="relative z-10">Aguardando</span>
+                    </li>
+                    <li className="border rounded-full px-4 py-1 bg-black text-white text-[0.9rem]">Hoje</li>
                 </ul>
             </nav>
 
@@ -78,10 +93,22 @@ export default function Clientes() {
                 />
             </div>
 
-            <main className="bg-[#faf9f7] text-[#1c1917] p-6 flex flex-col items-center gap-8">
+            {/* Modal de detalhes */}
+            {isModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" aria-hidden="true" />
+                    <ClienteDetails
+                        closeModal={handleCloseModal}
+                        result={result}
+                    />
+                </div>
+            )}
+
+
+            <main className="bg-[#faf9f7] text-[#1c1917] px-5 mb-20 flex flex-col items-center gap-8">
                 {/* Clients List */}
                 {clientes.map((c) => (
-                    <div key={c.cliente_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5 shadow-md md:max-w-2xl">
+                    <div key={c.cliente_id} className="w-full max-w-[420px] rounded-lg border-l-4 border-[#8b7355] bg-[#eae8e3] p-5  shadow-md md:max-w-2xl">
                         {/* Linha superior */}
                         <div className="flex items-start justify-between mb-4 gap-3">
                             <div className="min-w-0 flex-1">
@@ -107,7 +134,7 @@ export default function Clientes() {
                                 <Clock width={16} height={16} />
                                 <span className="text-sm">{c.status}</span>
                             </div>
-                            <button className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
+                            <button onClick={() => handleDetails(c.cliente_id)} className="text-sm text-[#1a1a1a] underline underline-offset-2 hover:text-[#555555] transition-colors">
                                 Detalhes
                             </button>
                         </div>
