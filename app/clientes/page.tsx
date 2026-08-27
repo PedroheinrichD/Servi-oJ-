@@ -64,7 +64,7 @@ export default function Clientes() {
                 <div className="mb-6 flex items-start justify-between">
                     <div>
                         <h1 className="mt-1 font-serif text-4xl font-light text-[#1c1917]">
-                            Agendamentos
+                            Clientes
                         </h1>
                         <p className="text-sm font-medium uppercase tracking-[0.2em] text-textTitle">
                             agendamentos
