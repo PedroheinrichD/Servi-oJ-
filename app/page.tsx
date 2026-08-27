@@ -105,6 +105,7 @@ interface ServiceCardProps {
   description: string;
   price: string;
   images?: string;
+  animationDelay?: number;
 }
 
 // ─── Sub-components ──────────────────────────────────────────────
@@ -115,6 +116,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   description,
   price,
   images,
+  animationDelay = 0,
 }) => {
   const imageList = images
     ? images
@@ -124,7 +126,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     : [];
 
   return (
-    <div className="overflow-hidden bg-surface-container rounded-lg">
+    <div
+      style={{ animationDelay: `${animationDelay}ms` }}
+      className="home-service-card overflow-hidden bg-surface-container rounded-lg"
+    >
       {imageList.length > 1 ? (
         <ImageCarousel
           images={imageList}
@@ -183,9 +188,9 @@ async function Page() {
   ];
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface font-body">
+    <div className="home-page min-h-screen bg-surface text-on-surface font-body">
       {/* ─── Header ─────────────────────────────────────────────── */}
-      <header className="flex items-center justify-between px-5 py-4 bg-surface">
+      <header className="home-header flex items-center justify-between px-5 py-4 bg-surface">
         <button className="text-on-surface p-1">
           <MenuIcon />
         </button>
@@ -203,7 +208,7 @@ async function Page() {
       </header>
 
       {/* ─── Hero Image ─────────────────────────────────────────── */}
-      <section className="px-5 pt-2 pb-8">
+      <section className="home-hero px-5 pt-2 pb-8">
         <div className="w-full aspect-[3/4] bg-surface-container-high overflow-hidden">
           <Image
             src="/caroline-image.png"
@@ -216,7 +221,7 @@ async function Page() {
       </section>
 
       {/* ─── Profile ────────────────────────────────────────────── */}
-      <section className="px-5 pb-10">
+      <section className="home-profile px-5 pb-10">
         <span className="block font-label text-secondary mb-3">
           Especialista em Beleza e Cuidados
         </span>
@@ -242,7 +247,7 @@ async function Page() {
       </div>
 
       {/* ─── CTA Section ────────────────────────────────────────── */}
-      <section className="px-5 py-12 text-center">
+      <section className="home-cta px-5 py-12 text-center">
         <h2 className="font-serif text-[28px] text-on-surface leading-[1.2] mb-4">
           Agende seu momento de
           <br />
@@ -254,14 +259,14 @@ async function Page() {
         </p>
 
         <Link href={"/agendamento"}>
-          <button className="w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
+          <button className="home-action-button w-full py-4 bg-primary-container font-button text-[12px] text-on-primary hover:bg-primary transition-colors duration-300">
             Agendar Agora
           </button>
         </Link>
       </section>
 
       {/* ─── Services ───────────────────────────────────────────── */}
-      <section className="px-5 pb-16">
+      <section className="home-services px-5 pb-16">
         <h2 className="font-serif text-[28px] text-on-surface text-center mb-10 leading-[1.2]">
           Nossos Serviços
         </h2>
@@ -276,6 +281,7 @@ async function Page() {
                 description={service.descricao}
                 price={`R$ ${service.valor}`}
                 images={service.lista_url}
+                animationDelay={index * 80}
               />
               {index < services.length - 1 && (
                 <div

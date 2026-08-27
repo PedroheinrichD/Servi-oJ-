@@ -181,7 +181,7 @@ export default function Agendamento() {
   return (
     <div className="af-page">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&display=swap');`}</style>
-      <div>
+      <div className="af-content">
         <div className="af-eyebrow">Ficha de agendamento</div>
         <h1 className="af-title">Agendamento</h1>
         <p className="af-subtitle">
@@ -203,7 +203,7 @@ export default function Agendamento() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} noValidate>
+        <form className="af-form" onSubmit={handleSubmit} noValidate>
           <div className="af-section-title">Seus dados</div>
           <div className="af-grid">
             <Campo icon={User} label="Nome" required error={erro(nome.trim())}>
