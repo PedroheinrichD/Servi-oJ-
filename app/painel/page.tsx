@@ -33,9 +33,16 @@ export default function Painel() {
   const [successful, setSuccessful] = useState(false)
   const [isModal, setIsModal] = useState(false)
 
-
   const isKeyboardOpen = useKeyboard();  // hook
 
+  const hora = new Date().getHours();
+
+  const saudacao =
+    hora >= 5 && hora < 12
+      ? "Bom dia"
+      : hora >= 12 && hora < 18
+        ? "Boa tarde"
+        : "Boa noite";
 
   async function handleDelete(id: number) {
     setIsModal(false)
@@ -188,7 +195,7 @@ export default function Painel() {
         <div className="mb-12 flex items-start justify-between">
           <div>
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-textTitle">
-              Bom dia,
+              {saudacao},
             </p>
             <h1 className="mt-1 font-serif text-4xl font-light text-[#1c1917]">
               Caroline
