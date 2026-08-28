@@ -107,6 +107,7 @@ export default function Agendamento() {
       return;
     }
     try {
+      const tokenCancelamento = crypto.randomUUID();
       const resultado = SERVICOS.find(
         (item) => item.id === Number(servicoValueId),
       );
@@ -118,6 +119,7 @@ export default function Agendamento() {
         data: data,
         hora: horario,
         valor_na_epoca: resultado?.valor,
+        token_cancelamento: tokenCancelamento
       });
 
       setTimeout(() => {

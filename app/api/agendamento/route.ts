@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const clienteId = (resultadoCliente as ResultSetHeader).insertId;
 
     const [resultadoAgendamento] = await connection.query(
-      "INSERT INTO agendamentos (cliente_id, servico_id, data, hora, status, valor_na_epoca) VALUES (?, ?, ?, ?, ?, ?)",
+      "INSERT INTO agendamentos (cliente_id, servico_id, data, hora, status, valor_na_epoca, token_cancelamento) VALUES (?, ?, ?, ?, ?, ?)",
       [clienteId, Number(servico_id), data, hora, "aguardando", valor_na_epoca],
     );
 
