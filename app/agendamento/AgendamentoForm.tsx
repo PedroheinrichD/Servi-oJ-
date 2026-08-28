@@ -28,6 +28,15 @@ const HORARIOS = [
   "18:00",
 ];
 
+const TICKET_STORAGE_KEY = "servioj:ticket-agendamento";
+
+type AgendamentoConfirmado = {
+  nome: string;
+  data: string;
+  horario: string;
+  servico: string;
+};
+
 function formatarTelefone(valor: string): string {
   const digitos = valor.replace(/\D/g, "").slice(0, 11);
   const ddd = digitos.slice(0, 2);
@@ -76,12 +85,8 @@ export default function Agendamento() {
   const [confirmado, setConfirmado] = useState(false);
   const [tokenCancelamento, setTokenCancelamento] = useState("");
   const [mensagemCancelamento, setMensagemCancelamento] = useState("");
-  const [agendamentoConfirmado, setAgendamentoConfirmado] = useState<{
-    nome: string;
-    data: string;
-    horario: string;
-    servico: string;
-  } | null>(null);
+  const [agendamentoConfirmado, setAgendamentoConfirmado] =
+    useState<AgendamentoConfirmado | null>(null);
   const [horariosDisponiveis, setHorariosDisponiveis] = useState([""]);
 
   const obrigatoriosOk = Boolean(
@@ -112,6 +117,7 @@ export default function Agendamento() {
     setTokenCancelamento("");
     setMensagemCancelamento("");
     setAgendamentoConfirmado(null);
+    window.localStorage.removeItem(TICKET_STORAGE_KEY);
   }
 
   async function handleCancelamento() {
@@ -121,6 +127,8 @@ export default function Agendamento() {
       });
       setMensagemCancelamento("Agendamento cancelado com sucesso.");
       setTokenCancelamento("");
+      setAgendamentoConfirmado(null);
+      window.localStorage.removeItem(TICKET_STORAGE_KEY);
     } catch {
       setMensagemCancelamento("Não foi possível cancelar o agendamento.");
     }
@@ -146,14 +154,21 @@ export default function Agendamento() {
         token_cancelamento: tokenCancelamento
       });
 
-      setTokenCancelamento(resposta.data.tokenCancelamento ?? tokenCancelamento);
-      setConfirmado(true);
-      setAgendamentoConfirmado({
+      const tokenSalvo = resposta.data.tokenCancelamento ?? tokenCancelamento;
+      const ticket = {
         nome,
         data,
         horario,
         servico: resultado?.nome ?? "Serviço",
-      });
+      };
+
+      setTokenCancelamento(tokenSalvo);
+      setConfirmado(true);
+      setAgendamentoConfirmado(ticket);
+      window.localStorage.setItem(
+        TICKET_STORAGE_KEY,
+        JSON.stringify({ ticket, tokenCancelamento: tokenSalvo }),
+      );
       setTimeout(() => {
         setConfirmado(false);
       }, 4000);
@@ -161,6 +176,31 @@ export default function Agendamento() {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      const ticketSalvo = window.localStorage.getItem(TICKET_STORAGE_KEY);
+      if (!ticketSalvo) return;
+
+      try {
+        const dados = JSON.parse(ticketSalvo) as {
+          ticket?: AgendamentoConfirmado;
+          tokenCancelamento?: string;
+        };
+
+        if (dados.ticket && dados.tokenCancelamento) {
+          setAgendamentoConfirmado(dados.ticket);
+          setTokenCancelamento(dados.tokenCancelamento);
+        } else {
+          window.localStorage.removeItem(TICKET_STORAGE_KEY);
+        }
+      } catch {
+        window.localStorage.removeItem(TICKET_STORAGE_KEY);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     if (!agendamentoConfirmado) return;
