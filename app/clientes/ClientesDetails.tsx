@@ -112,16 +112,18 @@ export function ClienteDetails({ closeModal, result, loadClientes }: detailsProp
             </div>
 
             {/* Ações */}
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              <button onClick={() => concluirAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#101a15] py-3 text-sm font-semibold text-white transition hover:bg-[#30312e]">
-                <Check size={20} />
-                Concluir
-              </button>
-              <button onClick={() => cancelarAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#ba1a1a]/30 py-3 text-sm font-semibold text-[#ba1a1a] transition hover:bg-[#ffdad6]/40">
-                <X size={20} />
-                Cancelar
-              </button>
-            </div>
+            {c.status === "aguardando" && (
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <button onClick={() => concluirAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#101a15] py-3 text-sm font-semibold text-white transition hover:bg-[#30312e]">
+                  <Check size={20} />
+                  Concluir
+                </button>
+                <button onClick={() => cancelarAgendamento(c.agendamento_id)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#ba1a1a]/30 py-3 text-sm font-semibold text-[#ba1a1a] transition hover:bg-[#ffdad6]/40">
+                  <X size={20} />
+                  Cancelar
+                </button>
+              </div>
+            )}
 
             <button
               className="mt-4 w-full text-center text-xs font-bold uppercase tracking-wider text-[#737874] transition hover:text-[#1b1c19]"
