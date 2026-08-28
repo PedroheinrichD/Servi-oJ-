@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import {
   User,
   Phone,
@@ -64,6 +64,7 @@ function Campo({ icon: Icon, label, required, error, children }: CampoProps) {
 }
 
 export default function Agendamento() {
+  const ticketRef = useRef<HTMLElement>(null);
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [endereco, setEndereco] = useState("");
@@ -73,6 +74,14 @@ export default function Agendamento() {
   const [SERVICOS, setSERVICOS] = useState<serviceGetType[]>([]);
   const [tentouEnviar, setTentouEnviar] = useState(false);
   const [confirmado, setConfirmado] = useState(false);
+  const [tokenCancelamento, setTokenCancelamento] = useState("");
+  const [mensagemCancelamento, setMensagemCancelamento] = useState("");
+  const [agendamentoConfirmado, setAgendamentoConfirmado] = useState<{
+    nome: string;
+    data: string;
+    horario: string;
+    servico: string;
+  } | null>(null);
   const [horariosDisponiveis, setHorariosDisponiveis] = useState([""]);
 
   const obrigatoriosOk = Boolean(
@@ -85,10 +94,10 @@ export default function Agendamento() {
   );
   const erro = (valor: string | boolean): boolean => tentouEnviar && !valor;
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     setTentouEnviar(true);
-    if (obrigatoriosOk) setConfirmado(true);
+    if (obrigatoriosOk) await handlePOST();
   }
 
   function handleNovoAgendamento(): void {
@@ -100,6 +109,21 @@ export default function Agendamento() {
     setHorario("");
     setTentouEnviar(false);
     setConfirmado(false);
+    setTokenCancelamento("");
+    setMensagemCancelamento("");
+    setAgendamentoConfirmado(null);
+  }
+
+  async function handleCancelamento() {
+    try {
+      await api.delete("/api/agendamento/cancelar", {
+        data: { token_cancelamento: tokenCancelamento },
+      });
+      setMensagemCancelamento("Agendamento cancelado com sucesso.");
+      setTokenCancelamento("");
+    } catch {
+      setMensagemCancelamento("Não foi possível cancelar o agendamento.");
+    }
   }
 
   async function handlePOST() {
@@ -111,7 +135,7 @@ export default function Agendamento() {
       const resultado = SERVICOS.find(
         (item) => item.id === Number(servicoValueId),
       );
-      await api.post("/api/agendamento", {
+      const resposta = await api.post("/api/agendamento", {
         nome: nome,
         telefone: telefone,
         endereco: endereco,
@@ -122,13 +146,27 @@ export default function Agendamento() {
         token_cancelamento: tokenCancelamento
       });
 
+      setTokenCancelamento(resposta.data.tokenCancelamento ?? tokenCancelamento);
+      setConfirmado(true);
+      setAgendamentoConfirmado({
+        nome,
+        data,
+        horario,
+        servico: resultado?.nome ?? "Serviço",
+      });
       setTimeout(() => {
-        handleNovoAgendamento();
+        setConfirmado(false);
       }, 4000);
     } catch (error) {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    if (!agendamentoConfirmado) return;
+
+    ticketRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [agendamentoConfirmado]);
 
   useEffect(() => {
     async function GetHorario() {
@@ -307,10 +345,30 @@ export default function Agendamento() {
             </Campo>
           </div>
 
-          <button type="submit" className="af-submit" onClick={handlePOST}>
+          <button type="submit" className="af-submit">
             Confirmar agendamento
           </button>
         </form>
+
+        {agendamentoConfirmado && (
+          <section ref={ticketRef} className="af-ticket" aria-live="polite">
+            <div>
+              <p className="af-ticket-label">Agendamento confirmado</p>
+              <h2>{agendamentoConfirmado.nome}</h2>
+              <p>{agendamentoConfirmado.servico}</p>
+              <p>
+                {agendamentoConfirmado.data} às {agendamentoConfirmado.horario}
+              </p>
+              <div className="af-ticket-token">
+                <span>Código de cancelamento</span>
+                <code>{tokenCancelamento}</code>
+              </div>
+            </div>
+            <button type="button" onClick={handleCancelamento}>
+              {mensagemCancelamento || "Cancelar agendamento"}
+            </button>
+          </section>
+        )}
       </div>
 
       {confirmado && (

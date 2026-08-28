@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
   try {
     const [rows] = await pool.query(
-      "SELECT hora FROM agendamentos WHERE data = ?",
+      "SELECT hora FROM agendamentos WHERE data = ? AND status <> 'Cancelado'",
       [data],
     );
     return Response.json(rows);

@@ -647,6 +647,81 @@ body {
   outline-offset: 3px;
 }
 
+.af-ticket {
+  scroll-margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border-left: 3px solid #735A3A;
+  background: #F0EEE9;
+  color: #434844;
+  animation: af-content-in 500ms ease-out both;
+}
+
+.af-ticket-token {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #D6D3D1;
+}
+
+.af-ticket-token span {
+  color: #78716C;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.af-ticket-token code {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #C3C8C3;
+  background: #FBF9F4;
+  color: #1B1C19;
+  font-family: monospace;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.af-ticket-label {
+  margin-bottom: 0.35rem;
+  color: #735A3A;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.af-ticket h2 {
+  color: #1B1C19;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.af-ticket button {
+  flex-shrink: 0;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #BA1A1A;
+  color: #BA1A1A;
+  background: transparent;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.af-ticket button:hover {
+  background: #BA1A1A;
+  color: #FFFFFF;
+}
+
 .af-banner {
   position: fixed;
   top: 50%;
@@ -739,7 +814,8 @@ body {
   .af-content,
   .af-section-title,
   .af-field-group,
-  .af-banner-backdrop {
+  .af-banner-backdrop,
+  .af-ticket {
     transition: none;
     animation: none;
   }
