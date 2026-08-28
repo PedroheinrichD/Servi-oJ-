@@ -14,10 +14,11 @@ export function ClienteDetails({ closeModal, result, loadClientes }: detailsProp
 
   async function concluirAgendamento(id: number){
     try{
-      const req = await api.put('/api/status',{
+      await api.put('/api/status',{
         agendamento_id: id,
         status: 'Atendido'
       })
+      localStorage.removeItem("servioj:ticket-agendamento");
       closeModal();
       loadClientes();
     }catch{

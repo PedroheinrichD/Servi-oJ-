@@ -203,7 +203,14 @@ export default function Agendamento() {
 
   useEffect(() => {
     function atualizarTicket(event: StorageEvent) {
-      if (event.key !== TICKET_STORAGE_KEY || !event.newValue) return;
+      if (event.key !== TICKET_STORAGE_KEY) return;
+
+      if (!event.newValue) {
+        setAgendamentoConfirmado(null);
+        setTokenCancelamento("");
+        setMensagemCancelamento("");
+        return;
+      }
 
       try {
         const dados = JSON.parse(event.newValue) as {
