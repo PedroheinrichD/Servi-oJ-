@@ -35,6 +35,7 @@ type AgendamentoConfirmado = {
   data: string;
   horario: string;
   servico: string;
+  canceladoPorAdmin?: boolean;
 };
 
 function formatarTelefone(valor: string): string {
@@ -114,10 +115,6 @@ export default function Agendamento() {
     setHorario("");
     setTentouEnviar(false);
     setConfirmado(false);
-    setTokenCancelamento("");
-    setMensagemCancelamento("");
-    setAgendamentoConfirmado(null);
-    window.localStorage.removeItem(TICKET_STORAGE_KEY);
   }
 
   async function handleCancelamento() {
@@ -126,6 +123,7 @@ export default function Agendamento() {
         data: { token_cancelamento: tokenCancelamento },
       });
       setMensagemCancelamento("Agendamento cancelado com sucesso.");
+      setConfirmado(false);
       setTokenCancelamento("");
       setAgendamentoConfirmado(null);
       window.localStorage.removeItem(TICKET_STORAGE_KEY);
@@ -170,8 +168,9 @@ export default function Agendamento() {
         JSON.stringify({ ticket, tokenCancelamento: tokenSalvo }),
       );
       setTimeout(() => {
+        handleNovoAgendamento();
         setConfirmado(false);
-      }, 4000);
+      }, 2000);
     } catch (error) {
       console.error(error);
     }
@@ -200,6 +199,30 @@ export default function Agendamento() {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    function atualizarTicket(event: StorageEvent) {
+      if (event.key !== TICKET_STORAGE_KEY || !event.newValue) return;
+
+      try {
+        const dados = JSON.parse(event.newValue) as {
+          ticket?: AgendamentoConfirmado;
+          tokenCancelamento?: string;
+        };
+
+        if (dados.ticket && dados.tokenCancelamento) {
+          setAgendamentoConfirmado(dados.ticket);
+          setTokenCancelamento(dados.tokenCancelamento);
+          setMensagemCancelamento("");
+        }
+      } catch {
+        // Ignora valores inválidos gravados no armazenamento.
+      }
+    }
+
+    window.addEventListener("storage", atualizarTicket);
+    return () => window.removeEventListener("storage", atualizarTicket);
   }, []);
 
   useEffect(() => {
@@ -393,20 +416,31 @@ export default function Agendamento() {
         {agendamentoConfirmado && (
           <section ref={ticketRef} className="af-ticket" aria-live="polite">
             <div>
-              <p className="af-ticket-label">Agendamento confirmado</p>
-              <h2>{agendamentoConfirmado.nome}</h2>
+              <p className="af-ticket-label">
+                {agendamentoConfirmado.canceladoPorAdmin
+                  ? "Agendamento cancelado"
+                  : "Agendamento confirmado"}
+              </p>
+              {agendamentoConfirmado.canceladoPorAdmin && (
+                <h2>Caroline cancelou o agendamento</h2>
+              )}
+              {!agendamentoConfirmado.canceladoPorAdmin && (
+                <h2>{agendamentoConfirmado.nome}</h2>
+              )}
               <p>{agendamentoConfirmado.servico}</p>
               <p>
                 {agendamentoConfirmado.data} às {agendamentoConfirmado.horario}
               </p>
-              <div className="af-ticket-token">
+              {!agendamentoConfirmado.canceladoPorAdmin && <div className="af-ticket-token">
                 <span>Código de cancelamento</span>
                 <code>{tokenCancelamento}</code>
-              </div>
+              </div>}
             </div>
-            <button type="button" onClick={handleCancelamento}>
-              {mensagemCancelamento || "Cancelar agendamento"}
-            </button>
+            {!agendamentoConfirmado.canceladoPorAdmin && (
+              <button type="button" onClick={handleCancelamento}>
+                {mensagemCancelamento || "Cancelar agendamento"}
+              </button>
+            )}
           </section>
         )}
       </div>

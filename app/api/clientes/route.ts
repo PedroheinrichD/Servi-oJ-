@@ -17,6 +17,7 @@ export async function GET(request: Request) {
         s.nome AS servico_nome,
         a.status,
         a.valor_na_epoca,
+        a.token_cancelamento,
         a.data,
         a.hora,
         c.endereco

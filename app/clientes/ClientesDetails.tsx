@@ -27,10 +27,28 @@ export function ClienteDetails({ closeModal, result, loadClientes }: detailsProp
 
   async function cancelarAgendamento(id: number){
     try{
-      const req = await api.put('/api/status',{
+      await api.put('/api/status',{
         agendamento_id: id,
         status: 'Cancelado'
       })
+
+      const cliente = result.find((item) => item.agendamento_id === id);
+      if (cliente?.token_cancelamento) {
+        localStorage.setItem(
+          "servioj:ticket-agendamento",
+          JSON.stringify({
+            ticket: {
+              nome: cliente.cliente_nome,
+              data: cliente.data,
+              horario: cliente.hora,
+              servico: cliente.servico_nome,
+              canceladoPorAdmin: true,
+            },
+            tokenCancelamento: cliente.token_cancelamento,
+          }),
+        );
+      }
+
       closeModal();
       loadClientes();
     }catch{

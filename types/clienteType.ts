@@ -10,4 +10,5 @@ export type clienteType = {
     status: string
     valor_na_epoca: number
     endereco: string
+    token_cancelamento: string
 }
