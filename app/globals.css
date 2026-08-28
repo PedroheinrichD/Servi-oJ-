@@ -649,28 +649,45 @@ body {
 
 .af-ticket {
   scroll-margin-top: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 1rem;
   margin-top: 2rem;
-  padding: 1.25rem;
-  border-left: 3px solid #735A3A;
-  background: #F0EEE9;
-  color: #434844;
+  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: #1b2720;
+  color: #c4cec6;
   animation: af-content-in 500ms ease-out both;
 }
 
+.af-ticket::before {
+  content: "";
+  position: absolute;
+  top: -1.25rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #fbf9f4;
+}
+
+.af-ticket > div:first-child {
+  min-width: 0;
+}
+
 .af-ticket-token {
+  grid-column: 1 / -1;
   display: grid;
   gap: 0.3rem;
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #D6D3D1;
+  margin-top: 0.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid #344139;
 }
 
 .af-ticket-token span {
-  color: #78716C;
+  color: #8f9d93;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -681,34 +698,70 @@ body {
   width: fit-content;
   max-width: 100%;
   padding: 0.4rem 0.55rem;
-  border: 1px solid #C3C8C3;
-  background: #FBF9F4;
-  color: #1B1C19;
+  border: 1px solid #536258;
+  background: #243129;
+  color: #e5c27c;
   font-family: monospace;
   font-size: 0.75rem;
   overflow-wrap: anywhere;
 }
 
 .af-ticket-label {
-  margin-bottom: 0.35rem;
-  color: #735A3A;
-  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.35rem;
+  color: #c69142;
+  font-size: 0.66rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
+.af-ticket-label::before {
+  content: "TICKET";
+  margin-right: 0.45rem;
+  color: #e5c27c;
+}
+
 .af-ticket h2 {
-  color: #1B1C19;
+  grid-column: 1 / -1;
+  margin-bottom: 0.9rem;
+  color: #f5f3ee;
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.55rem;
+  font-weight: 400;
+}
+
+.af-ticket > div:first-child > p:not(.af-ticket-label) {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.72rem 0;
+  border-bottom: 1px solid #344139;
+  color: #f0eee9;
+  font-size: 0.9rem;
+}
+
+.af-ticket > div:first-child > p:not(.af-ticket-label)::before {
+  color: #8f9d93;
+  font-size: 0.7rem;
+}
+
+.af-ticket > div:first-child > p:nth-of-type(2)::before {
+  content: "Serviço";
+}
+
+.af-ticket > div:first-child > p:nth-of-type(3)::before {
+  content: "Data / horário";
 }
 
 .af-ticket button {
+  align-self: end;
   flex-shrink: 0;
   padding: 0.65rem 0.85rem;
-  border: 1px solid #BA1A1A;
-  color: #BA1A1A;
+  border: 1px solid #a9504b;
+  color: #e58b82;
   background: transparent;
   font-size: 0.7rem;
   font-weight: 700;
@@ -718,8 +771,22 @@ body {
 }
 
 .af-ticket button:hover {
-  background: #BA1A1A;
+  background: #a9504b;
   color: #FFFFFF;
+}
+
+@media (max-width: 560px) {
+  .af-ticket {
+    grid-template-columns: 1fr;
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+    gap: 1rem;
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .af-ticket button {
+    width: 100%;
+  }
 }
 
 .af-banner {

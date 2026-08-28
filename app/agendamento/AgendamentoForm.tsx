@@ -51,6 +51,11 @@ function formatarTelefone(valor: string): string {
   return saida;
 }
 
+function formatarData(valor: string): string {
+  const [ano, mes, dia] = valor.split("-");
+  return ano && mes && dia ? `${dia}-${mes}-${ano}` : valor;
+}
+
 type CampoProps = {
   icon: LucideIcon;
   label: string;
@@ -420,38 +425,39 @@ export default function Agendamento() {
           </button>
         </form>
 
-        {agendamentoConfirmado && (
-          <section ref={ticketRef} className="af-ticket" aria-live="polite">
-            <div>
-              <p className="af-ticket-label">
-                {agendamentoConfirmado.canceladoPorAdmin
-                  ? "Agendamento cancelado"
-                  : "Agendamento confirmado"}
-              </p>
-              {agendamentoConfirmado.canceladoPorAdmin && (
-                <h2>Caroline cancelou o agendamento</h2>
-              )}
-              {!agendamentoConfirmado.canceladoPorAdmin && (
-                <h2>{agendamentoConfirmado.nome}</h2>
-              )}
-              <p>{agendamentoConfirmado.servico}</p>
-              <p>
-                {agendamentoConfirmado.data} às {agendamentoConfirmado.horario}
-              </p>
-              {!agendamentoConfirmado.canceladoPorAdmin && <div className="af-ticket-token">
-                <span>Código de cancelamento</span>
-                <code>{tokenCancelamento}</code>
-              </div>}
-            </div>
-            {!agendamentoConfirmado.canceladoPorAdmin && (
-              <button type="button" onClick={handleCancelamento}>
-                {mensagemCancelamento || "Cancelar agendamento"}
-              </button>
-            )}
-          </section>
-        )}
-      </div>
 
+      </div>
+      {agendamentoConfirmado && (
+        <section ref={ticketRef} className="af-ticket" aria-live="polite">
+          <div>
+            <p className="af-ticket-label">
+              {agendamentoConfirmado.canceladoPorAdmin
+                ? "Agendamento cancelado"
+                : "Agendamento confirmado"}
+            </p>
+            {agendamentoConfirmado.canceladoPorAdmin && (
+              <h2>Caroline cancelou o agendamento</h2>
+            )}
+            {!agendamentoConfirmado.canceladoPorAdmin && (
+              <h2>{agendamentoConfirmado.nome}</h2>
+            )}
+            <p>{agendamentoConfirmado.servico}</p>
+            <p>
+              {formatarData(agendamentoConfirmado.data)} às {agendamentoConfirmado.horario}
+            </p>
+            {!agendamentoConfirmado.canceladoPorAdmin && <div className="af-ticket-token">
+              <span>Código de cancelamento</span>
+              <code>{tokenCancelamento}</code>
+            </div>}
+          </div>
+          {!agendamentoConfirmado.canceladoPorAdmin && (
+            <button type="button" onClick={handleCancelamento}>
+              {mensagemCancelamento || "Cancelar agendamento"}
+            </button>
+          )}
+        </section>
+      )}
+      
       {confirmado && (
         <>
           <div className="af-banner-backdrop" aria-hidden="true" />
