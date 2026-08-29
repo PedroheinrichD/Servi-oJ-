@@ -45,13 +45,4 @@ A aplicação foi desenvolvida utilizando o **App Router do Next.js**, com separ
 
 O sistema possui uma comunicação entre a interface da aplicação e as APIs responsáveis pelo processamento das operações no banco de dados.
 
-Fluxo simplificado:
-
-```text
-Interface (React)
-       ↓
-API Routes (Next.js)
-       ↓
-Consultas SQL
-       ↓
-MySQL
+<img width="714" height="3190" alt="Image" src="https://github.com/user-attachments/assets/0d41c8d1-8827-416d-8ff5-5fe73a11248d" />
