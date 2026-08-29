@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sistema de Agendamento para Salão de Beleza
 
-## Getting Started
+Sistema web desenvolvido como projeto de extensão universitária com o objetivo de auxiliar na organização de agendamentos e serviços de um salão de beleza.
 
-First, run the development server:
+A aplicação permite que clientes consultem os serviços disponíveis, seus respectivos preços e realizem agendamentos. O sistema também possui uma área administrativa para gerenciamento dos serviços e dos agendamentos.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Funcionalidades
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Área do cliente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Visualização dos serviços disponíveis
+- Exibição de preços e duração dos serviços
+- Agendamento de atendimento
+- Cadastro de informações do cliente
+- Seleção de data e horário
+- Verificação de horários disponíveis
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Área administrativa
 
-## Learn More
+- Autenticação de acesso
+- Visualização dos agendamentos
+- Marcação de atendimento como realizado
+- Cancelamento de agendamentos
+- Exclusão de agendamentos
+- Cadastro de serviços
+- Edição de serviços
+- Exclusão de serviços
+- Definição de preço, duração e descrição dos serviços
+- Atualização automática dos serviços exibidos na área do cliente
 
-To learn more about Next.js, take a look at the following resources:
+## Tecnologias utilizadas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js** — Framework utilizado para desenvolvimento da aplicação
+- **React** — Construção das interfaces e componentes
+- **TypeScript** — Tipagem estática e maior segurança durante o desenvolvimento
+- **MySQL** — Banco de dados relacional
+- **mysql2** — Conexão e execução de consultas no banco de dados
+- **Better Auth** — Autenticação e gerenciamento de sessões
+- **Tailwind CSS** — Estilização da interface
+- **Lucide React** — Biblioteca de ícones
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Arquitetura
 
-## Deploy on Vercel
+A aplicação foi desenvolvida utilizando o **App Router do Next.js**, com separação entre componentes, páginas, rotas de API e lógica de acesso ao banco de dados.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+O sistema possui uma comunicação entre a interface da aplicação e as APIs responsáveis pelo processamento das operações no banco de dados.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Fluxo simplificado:
+
+```text
+Interface (React)
+       ↓
+API Routes (Next.js)
+       ↓
+Consultas SQL
+       ↓
+MySQL
