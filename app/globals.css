@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -51,7 +50,6 @@
   --background: #fbf9f4;
   --on-background: #1b1c19;
   --surface-variant: #e4e2dd;
-  
 }
 
 @theme inline {
@@ -62,13 +60,13 @@
 }
 
 @theme {
-  --color-bgAll: #FBF9F4;
-  --color-bgMilitar: #242F29;
+  --color-bgAll: #fbf9f4;
+  --color-bgMilitar: #242f29;
   --color-textLabel: #434844;
-  --color-textTitle: #735A3A;
-  --color-borderBox: #C3C8C3;
-  --color-bgInput: #F5F3EE;
-  --color-footer-NAV: #F0EEE9
+  --color-textTitle: #735a3a;
+  --color-borderBox: #c3c8c3;
+  --color-bgInput: #f5f3ee;
+  --color-footer-NAV: #f0eee9;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -122,7 +120,9 @@ html {
 
 .cliente-card {
   animation: clientes-fade-up 450ms ease-out both;
-  transition: transform 250ms ease, box-shadow 250ms ease;
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease;
 }
 
 .cliente-card:hover {
@@ -151,7 +151,10 @@ html {
 
 .painel-service-card {
   animation: clientes-fade-up 450ms ease-out both;
-  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
+  transition:
+    transform 250ms ease,
+    box-shadow 250ms ease,
+    border-color 250ms ease;
 }
 
 .painel-service-card:hover {
@@ -184,7 +187,9 @@ html {
 
 .home-service-card {
   animation: clientes-fade-up 550ms ease-out both;
-  transition: transform 300ms ease, box-shadow 300ms ease;
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease;
 }
 
 .home-service-card:hover {
@@ -193,7 +198,10 @@ html {
 }
 
 .home-action-button {
-  transition: transform 250ms ease, background-color 300ms ease, box-shadow 250ms ease;
+  transition:
+    transform 250ms ease,
+    background-color 300ms ease,
+    box-shadow 250ms ease;
 }
 
 .home-action-button:hover {
@@ -203,6 +211,236 @@ html {
 
 .home-action-button:active {
   transform: translateY(0) scale(0.98);
+}
+
+/* ─── Desktop: Tablet (768px+) ─── */
+@media (min-width: 768px) {
+  .home-header {
+    padding: 2rem 2.5rem;
+  }
+
+  .home-hero {
+    padding: 1rem 2.5rem 3rem;
+  }
+
+  .home-hero .w-full {
+    aspect-ratio: 2 / 3;
+  }
+
+  .home-profile {
+    padding: 0 2.5rem 3rem;
+    max-width: 600px;
+  }
+
+  .home-profile h2 {
+    font-size: 2.5rem;
+  }
+
+  .home-profile p {
+    font-size: 1rem;
+  }
+
+  .home-cta {
+    padding: 3rem 2.5rem;
+    text-align: center;
+  }
+
+  .home-cta h2 {
+    font-size: 2.2rem;
+  }
+
+  .home-cta p {
+    max-width: 400px;
+  }
+
+  .home-action-button {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .home-services {
+    padding: 0 2.5rem 4rem;
+  }
+
+  .home-services h2 {
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .home-services > .flex {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .home-service-card {
+    height: 100%;
+  }
+
+  .home-service-card img {
+    height: 300px;
+  }
+
+  footer {
+    padding: 3rem 2.5rem;
+  }
+}
+
+/* ─── Desktop: Large (1024px+) ─── */
+@media (min-width: 1024px) {
+  .home-header {
+    padding: 2.5rem 4rem;
+  }
+
+  .home-hero {
+    padding: 1.5rem 4rem 4rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .home-hero .w-full {
+    max-width: 450px;
+    aspect-ratio: 2 / 3;
+  }
+
+  .home-profile {
+    padding: 0 4rem 4rem;
+    max-width: 700px;
+  }
+
+  .home-profile h2 {
+    font-size: 2.8rem;
+  }
+
+  .home-profile p {
+    font-size: 1.05rem;
+  }
+
+  .home-cta {
+    padding: 4rem;
+  }
+
+  .home-cta h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .home-cta p {
+    font-size: 1rem;
+    max-width: 500px;
+  }
+
+  .home-action-button {
+    max-width: 400px;
+    padding: 1.25rem 2rem;
+    font-size: 0.95rem;
+  }
+
+  .home-services {
+    padding: 0 4rem 5rem;
+  }
+
+  .home-services h2 {
+    font-size: 2.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .home-services > .flex {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .home-service-card {
+    height: 100%;
+    border-radius: 0.5rem;
+  }
+
+  .home-service-card img {
+    height: 350px;
+  }
+
+  .home-service-card p {
+    font-size: 0.95rem;
+  }
+
+  .home-service-card h3 {
+    font-size: 1.5rem;
+  }
+
+  footer {
+    padding: 4rem;
+  }
+
+  footer h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ─── Desktop: Extra Large (1280px+) ─── */
+@media (min-width: 1280px) {
+  .home-header {
+    padding: 3rem 6rem;
+  }
+
+  .home-hero {
+    padding: 2rem 6rem 5rem;
+  }
+
+  .home-hero .w-full {
+    max-width: 500px;
+  }
+
+  .home-profile {
+    padding: 0 6rem 5rem;
+    max-width: 800px;
+  }
+
+  .home-profile h2 {
+    font-size: 3rem;
+  }
+
+  .home-profile p {
+    font-size: 1.1rem;
+  }
+
+  .home-cta {
+    padding: 5rem 6rem;
+  }
+
+  .home-cta h2 {
+    font-size: 2.8rem;
+  }
+
+  .home-cta p {
+    font-size: 1.05rem;
+    max-width: 550px;
+  }
+
+  .home-services {
+    padding: 0 6rem 6rem;
+  }
+
+  .home-services h2 {
+    font-size: 2.8rem;
+    margin-bottom: 4rem;
+  }
+
+  .home-services > .flex {
+    gap: 3rem;
+  }
+
+  .home-service-card {
+    border-radius: 0.75rem;
+  }
+
+  .home-service-card img {
+    height: 400px;
+  }
+
+  footer {
+    padding: 5rem 6rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -235,19 +473,18 @@ html {
 }
 
 @layer components {
-
   /* ─── Font families ─── */
   .font-serif {
-    font-family: 'DM Serif Display', serif;
+    font-family: "DM Serif Display", serif;
   }
 
   .font-body {
-    font-family: 'Manrope', sans-serif;
+    font-family: "Manrope", sans-serif;
   }
 
   /* ─── Label: small caps, bold, wide tracking ─── */
   .font-label {
-    font-family: 'Manrope', sans-serif;
+    font-family: "Manrope", sans-serif;
     font-size: 11px;
     font-weight: 700;
     line-height: 1.4;
@@ -257,7 +494,7 @@ html {
 
   /* ─── Button: caps, semi-bold, slight tracking ─── */
   .font-button {
-    font-family: 'Manrope', sans-serif;
+    font-family: "Manrope", sans-serif;
     font-size: 12px;
     font-weight: 600;
     line-height: 1;
@@ -330,7 +567,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
   background-color: var(--surface);
   color: var(--on-surface);
   -webkit-font-smoothing: antialiased;
@@ -339,7 +576,7 @@ body {
 }
 
 .font-title {
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .errorMessage {
@@ -347,7 +584,6 @@ body {
   margin: 4px 0px 0px 4px;
   color: #f52e0b;
 }
-
 
 @media (max-width: 640px) {
   .af-card {
@@ -364,17 +600,17 @@ body {
   font-size: 0.7rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #735A3A;
+  color: #735a3a;
   font-weight: 600;
   margin-bottom: 0.75rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
 }
 
 .af-title {
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-weight: 400;
   font-size: 2.75rem;
-  color: #1B1C19;
+  color: #1b1c19;
   line-height: 1.1;
   margin-bottom: 0.6rem;
   letter-spacing: 0;
@@ -452,19 +688,19 @@ body {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #1C1917;
+  color: #1c1917;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin: 2.5rem 0 1.5rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
 }
 
 .af-section-title::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, #C3C8C3 0%, transparent 100%);
+  background: linear-gradient(90deg, #c3c8c3 0%, transparent 100%);
 }
 
 .af-section-title:first-of-type {
@@ -483,34 +719,34 @@ body {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #78716C;
+  color: #78716c;
   margin-bottom: 0.65rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
 }
 
 .af-label-icon {
-  color: #735A3A;
+  color: #735a3a;
   flex-shrink: 0;
   opacity: 0.9;
 }
 
 .af-required {
-  color: #DC2626;
+  color: #dc2626;
   font-weight: 700;
 }
 
 .af-input,
 .af-select {
   width: 100%;
-  background: #F5F3EE;
-  border: 1px solid #C3C8C3;
+  background: #f5f3ee;
+  border: 1px solid #c3c8c3;
   border-radius: 0;
   padding: 0.85rem 1rem;
   font-size: 0.95rem;
-  color: #1B1C19;
+  color: #1b1c19;
   outline: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
   font-weight: 400;
 }
 
@@ -521,21 +757,21 @@ body {
 
 .af-input:hover,
 .af-select:hover {
-  border-color: #735A3A;
-  background: #FFFFFF;
+  border-color: #735a3a;
+  background: #ffffff;
 }
 
 .af-input:focus,
 .af-select:focus {
-  border-color: #735A3A;
-  background: #FFFFFF;
+  border-color: #735a3a;
+  background: #ffffff;
   box-shadow: 0 0 0 3px rgba(115, 90, 58, 0.14);
 }
 
 .af-input.af-invalid,
 .af-select.af-invalid {
-  border-color: #BA1A1A;
-  background: #FFF5F3;
+  border-color: #ba1a1a;
+  background: #fff5f3;
 }
 
 .af-input.af-invalid:focus,
@@ -546,7 +782,7 @@ body {
 .af-error {
   margin-top: 0.5rem;
   font-size: 0.75rem;
-  color: #BA1A1A;
+  color: #ba1a1a;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -555,11 +791,11 @@ body {
 }
 
 .af-error::before {
-  content: '';
+  content: "";
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #BA1A1A;
+  background: #ba1a1a;
   display: inline-block;
 }
 
@@ -579,7 +815,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #735A3A;
+  color: #735a3a;
   transition: transform 0.2s ease;
 }
 
@@ -602,8 +838,8 @@ body {
 .af-submit {
   margin-top: 2.5rem;
   width: 100%;
-  background: #242F29;
-  color: #FFFFFF;
+  background: #242f29;
+  color: #ffffff;
   border: none;
   padding: 1rem 1.5rem;
   font-weight: 600;
@@ -613,19 +849,24 @@ body {
   border-radius: 0;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Manrope', sans-serif;
+  font-family: "Manrope", sans-serif;
   position: relative;
   overflow: hidden;
 }
 
 .af-submit::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -643,7 +884,7 @@ body {
 }
 
 .af-submit:focus-visible {
-  outline: 2px solid #735A3A;
+  outline: 2px solid #735a3a;
   outline-offset: 3px;
 }
 
@@ -727,7 +968,7 @@ body {
   grid-column: 1 / -1;
   margin-bottom: 0.9rem;
   color: #f5f3ee;
-  font-family: 'DM Serif Display', Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: 1.55rem;
   font-weight: 400;
 }
@@ -767,12 +1008,14 @@ body {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: background-color 200ms ease, color 200ms ease;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 }
 
 .af-ticket button:hover {
   background: #a9504b;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 @media (max-width: 560px) {
@@ -797,8 +1040,8 @@ body {
   width: min(calc(100% - 2rem), 680px);
   transform: translate(-50%, -50%);
   padding: 1rem 1.25rem;
-  background: #F0EEE9;
-  border: 1px solid #C3C8C3;
+  background: #f0eee9;
+  border: 1px solid #c3c8c3;
   border-radius: 0;
   font-size: 0.9rem;
   color: #434844;
@@ -828,8 +1071,8 @@ body {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #735A3A;
-  color: #FFFFFF;
+  background: #735a3a;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -842,7 +1085,7 @@ body {
 .af-banner button {
   background: none;
   border: none;
-  color: #735A3A;
+  color: #735a3a;
   font-weight: 600;
   font-size: 0.72rem;
   text-transform: uppercase;
@@ -855,8 +1098,8 @@ body {
 }
 
 .af-banner button:hover {
-  background: #E4E2DD;
-  color: #1B1C19;
+  background: #e4e2dd;
+  color: #1b1c19;
 }
 
 @keyframes af-slideIn {
@@ -872,7 +1115,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .af-submit,
   .af-input,
   .af-select,
