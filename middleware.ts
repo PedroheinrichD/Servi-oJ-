@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const sessionCookie = getSessionCookie(request);
 
-  if (pathname.startsWith("/painel") || pathname.startsWith("/clientes")) {
-    
-    const sessionToken = request.cookies.get("better-auth.session_token")?.value;
-
-    if (!sessionToken) {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    }
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return NextResponse.next();
 }
 
-// Aplica o middleware
 export const config = {
   matcher: ["/painel/:path*", "/clientes/:path*"],
 };
