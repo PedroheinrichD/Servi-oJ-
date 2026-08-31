@@ -593,6 +593,7 @@ body {
 
   .af-page {
     padding: 1.5rem 1rem;
+    position: relative;
   }
 }
 

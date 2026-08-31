@@ -11,9 +11,11 @@ import {
   ChevronDown,
   Check,
   type LucideIcon,
+  ArrowLeft,
 } from "lucide-react";
 import { api } from "@/utils/api";
 import { serviceGetType } from "@/types/serviceGetType";
+import Link from "next/link";
 
 const HORARIOS = [
   "08:00",
@@ -295,6 +297,14 @@ export default function Agendamento() {
 
   return (
     <div className="af-page">
+
+      <Link
+        href="/"
+        className="absolute z-99 top-3 right-3 group flex h-10 w-10 items-center justify-center rounded-full border border-[#e7e5e4] bg-white text-[#78716c] transition-all hover:border-[#d6d3d1] hover:text-[#1c1917] hover:shadow-md"
+      >
+        <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5 " />
+      </Link>
+
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700&display=swap');`}</style>
       <div className="af-content">
         <div className="af-eyebrow">Ficha de agendamento</div>
@@ -457,7 +467,7 @@ export default function Agendamento() {
           )}
         </section>
       )}
-      
+
       {confirmado && (
         <>
           <div className="af-banner-backdrop" aria-hidden="true" />
