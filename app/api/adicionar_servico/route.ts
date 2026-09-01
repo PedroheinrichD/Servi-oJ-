@@ -1,8 +1,9 @@
 import type { ResultSetHeader } from "mysql2/promise";
 import pool from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: Request) {
-  const { nome, descricao, valor, url } = await request.json();
+  const { nome, descricao, valor, url, } = await request.json();
 
   try {
     const [result] = await pool.query(
@@ -18,6 +19,9 @@ export async function POST(request: Request) {
         [urlImages.map((urlImage: string) => [servicoId, urlImage])],
       );
     }
+
+    // Revalidar a página principal para mostrar o novo serviço
+    revalidatePath("/");
 
     return Response.json(
       { message: "Serviço adicionado com sucesso", id: servicoId },

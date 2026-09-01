@@ -22,7 +22,7 @@ export async function addService({ nome, descricao, valor, setMessage, setSucces
             nome: nome,
             descricao: descricao,
             valor: valueAsNumber,
-            url: images
+            url: images,
         })
 
         setSuccessful(true)

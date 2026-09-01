@@ -5,6 +5,9 @@ import React from "react";
 import ImageCarousel from "./painel/ImageCarousel";
 import { getServicos } from "@/lib/queries";
 
+// Revalidar a página a cada 5 segundos (ISR - Incremental Static Regeneration)
+export const revalidate = 10;
+
 // ─── Icons (inline SVGs) ─────────────────────────────────────────
 const MenuIcon = ({ className }: { className?: string }) => (
   <svg
