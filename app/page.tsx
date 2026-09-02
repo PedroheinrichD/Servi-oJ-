@@ -191,14 +191,14 @@ async function Page() {
   ];
 
   return (
-    <div className="home-page min-h-screen bg-surface text-on-surface font-body">
+    <div className="home-page min-h-screen bg-surface text-on-surface font-body relative">
       {/* ─── Header ─────────────────────────────────────────────── */}
       <header className="home-header flex items-center justify-between px-5 py-4 bg-surface">
         <button className="text-on-surface p-1">
           <MenuIcon />
         </button>
 
-        <h1 className="font-serif text-[18px] tracking-[0.15em] uppercase text-on-surface">
+        <h1 className="font-serif text-[18px] tracking-[0.15em] uppercase text-on-surface lg:text-[30px]">
           Caroline
         </h1>
 
@@ -211,7 +211,7 @@ async function Page() {
       </header>
 
       {/* ─── Hero Image ─────────────────────────────────────────── */}
-      <section className="home-hero px-5 pt-2 pb-8">
+      <section className="home-hero px-5 pt-2 pb-8 md:absolute md:top-0 md:left-0 md:w-full md:z-[-1]">
         <div className="w-full aspect-[3/4] bg-surface-container-high overflow-hidden">
           <Image
             src="/caroline-image.png"
@@ -229,7 +229,7 @@ async function Page() {
           Especialista em Beleza e Cuidados
         </span>
 
-        <h2 className="font-serif text-[36px] text-on-surface leading-[1.1] mb-5">
+        <h2 className="font-serif text-[36px] text-on-surface leading-[1.1] mb-5 ">
           Caroline
           <br />
           Beleza & Estética
@@ -288,7 +288,7 @@ async function Page() {
               />
               {index < services.length - 1 && (
                 <div
-                  className="mx-auto h-px w-16 bg-[#d9cdb8]"
+                  className="mx-auto h-px w-16 bg-[#d9cdb8] md:hidden"
                   aria-hidden="true"
                 />
               )}

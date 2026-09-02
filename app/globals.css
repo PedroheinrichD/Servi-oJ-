@@ -384,7 +384,7 @@ html {
   }
 
   .home-hero {
-    padding: 2rem 6rem 5rem;
+    padding: 3rem 6rem 5rem;
   }
 
   .home-hero .w-full {
@@ -392,16 +392,18 @@ html {
   }
 
   .home-profile {
-    padding: 0 6rem 5rem;
+    padding: 4rem 6rem 5rem;
     max-width: 800px;
+    text-align: center;
+    margin: auto;
   }
 
   .home-profile h2 {
-    font-size: 3rem;
+    font-size: 4rem;
   }
 
   .home-profile p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
   .home-cta {
