@@ -215,6 +215,11 @@ html {
 
 /* ─── Desktop: Tablet (768px+) ─── */
 @media (min-width: 768px) {
+
+  .af-page {
+    padding: 4rem 2rem;
+  }
+
   .home-header {
     padding: 2rem 2.5rem;
   }
@@ -596,6 +601,12 @@ body {
   .af-page {
     padding: 1.5rem 1rem;
     position: relative;
+  }
+}
+
+@media (max-width: 768px) {
+  .af-page {
+    padding: 4rem 2rem;
   }
 }
 
@@ -1033,6 +1044,9 @@ body {
   .af-ticket button {
     width: 100%;
   }
+}
+.af-ticket{
+  padding: 20px;
 }
 
 .af-banner {
