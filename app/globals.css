@@ -286,9 +286,7 @@ html {
     height: 300px;
   }
 
-  footer {
-    padding: 3rem 2.5rem;
-  }
+
 }
 
 /* ─── Desktop: Large (1024px+) ─── */
@@ -373,9 +371,7 @@ html {
     font-size: 1.5rem;
   }
 
-  footer {
-    padding: 4rem;
-  }
+  
 
   footer h3 {
     font-size: 1.5rem;
@@ -445,9 +441,7 @@ html {
     height: 400px;
   }
 
-  footer {
-    padding: 5rem 6rem;
-  }
+ 
 }
 
 @media (prefers-reduced-motion: reduce) {
